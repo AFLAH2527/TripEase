@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reg Restaurant Dashboard</title>
+</head>
+<body>
+    <form method="post" class="">
+        {% csrf_token %}
+        <div class="p-2 w-full">
+            <div class="relative">
+                <label for="id_name">Type:</label>
+                <select name="type" id="type">
+                    {% for type in types %}
+                        <option value="{{forloop.counter}}">{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="p-2 w-full">
+            <div class="relative">
+                <label for="id_name">Name:</label>
+                <input type="text" name="name" maxlength="50" required="" id="id_name" fdprocessedid="0zfea" {% if restaurant %}value="{{restaurant.name}}" readonly{% else %}{% endif %} class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">                
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_email">Email:</label>
+                <input type="email" name="email" maxlength="254" required="" id="id_email" fdprocessedid="454zff" {% if restaurant.email %}value="{{restaurant.email}}" readonly{% else %}{% endif %} class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_phone">Phone:</label>
+                <input type="text" name="phone" maxlength="50" required="" id="id_phone" fdprocessedid="p2lzxb" value="{{restaurant.phone}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_poc_name">POC(point of contact):</label>
+                <input type="text" name="poc_name" maxlength="50" required="" id="id_poc_name" fdprocessedid="d8wja9" value="{{user.username}}" readonly class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_phone">Poc phone:</label>
+                <input type="text" name="poc_phone" maxlength="50" required="" id="id_poc_phone" fdprocessedid="p2lzxb" value="{{restaurant.poc_phone}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_place">Place:</label>
+                <input type="text" name="place" maxlength="50" required="" id="id_place" fdprocessedid="sytlc" value="{{restaurant.place}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_district">District:</label>
+                <input type="text" name="district" maxlength="50" required="" id="id_district" fdprocessedid="28pfzt" value="{{restaurant.district}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_state">State:</label>
+                <input type="text" name="state" maxlength="50" required="" id="id_state" fdprocessedid="eerlia" value="{{restaurant.state}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-1/2">
+            <div class="relative">
+                <label for="id_location">Location:</label>
+                <input type="text" name="location" maxlength="50" required="" id="id_location" fdprocessedid="eerlia" value="{{restaurant.location}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            </div>
+        </div>
+        <div class="p-2 w-full">
+            <button type="submit" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Register</button>
+        </div>
+    
+    </form>
+</body>
+</html>

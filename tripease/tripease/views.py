@@ -21,7 +21,7 @@ def hotel_register(request):
                                     )
             login(request, new_user)
 
-        return redirect('landing-page')
+        return redirect('hotel:register-hotel')
     
     form = UserCreationForm()
     context = {
@@ -44,7 +44,7 @@ def restaurant_register(request):
                                     )
             login(request, new_user)
 
-        return redirect('landing-page')
+        return redirect('restaurant:register-restaurant')
     
     form = UserCreationForm()
     context = {
@@ -67,7 +67,7 @@ def taxi_register(request):
                                     )
             login(request, new_user)
 
-        return redirect('landing-page')
+        return redirect('taxi:register-taxi')
     
     form = UserCreationForm()
     context = {
