@@ -1,14 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 
+from hotel.forms import HotelUserCreationForm
+from restaurant.forms import RestaurantUserCreationForm
+from taxi.forms import TaxiUserCreationForm
+
+from hotel.models import Hotel
+from restaurant.models import Restaurant
+from taxi.models import Taxi
+
 
 def hotel_register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = HotelUserCreationForm(request.POST)
         if form.is_valid():
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
@@ -23,7 +30,7 @@ def hotel_register(request):
 
         return redirect('hotel:register-hotel')
     
-    form = UserCreationForm()
+    form = HotelUserCreationForm()
     context = {
         'form': form
     }
@@ -31,7 +38,7 @@ def hotel_register(request):
 
 def restaurant_register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RestaurantUserCreationForm(request.POST)
         if form.is_valid():
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
@@ -46,7 +53,7 @@ def restaurant_register(request):
 
         return redirect('restaurant:register-restaurant')
     
-    form = UserCreationForm()
+    form = RestaurantUserCreationForm()
     context = {
         'form': form
     }
@@ -54,7 +61,7 @@ def restaurant_register(request):
 
 def taxi_register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = TaxiUserCreationForm(request.POST)
         if form.is_valid():
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
@@ -69,11 +76,52 @@ def taxi_register(request):
 
         return redirect('taxi:register-taxi')
     
-    form = UserCreationForm()
+    form = TaxiUserCreationForm()
     context = {
         'form': form
     }
     return render(request, 'registration/taxi_register.html', context)
+
+
+def redirect_login(request):
+    user = request.user
+    user_type = str(user.groups.all()[0])
+
+    if user_type=='admin':
+        return redirect('/admin/')
+
+    elif user_type=='hotel':
+        try:
+            hotel = Hotel.objects.get(poc_name=user, email=user.email)
+            if hotel.admin_approved==True:
+                return redirect('hotel:hotel')
+            else:
+                return HttpResponse("Admin approvel pending")
+        except:
+            return HttpResponse("Invalid Login")
+    
+    elif user_type=='restaurant':
+        try:
+            restaurant = Restaurant.objects.get(poc_name=user, email=user.email)
+            if restaurant.admin_approved==True:
+                return redirect('restaurant:restaurant')
+            else:
+                return HttpResponse("Admin approvel pending")
+        except:
+            return HttpResponse("Invalid Login")
+    
+    elif user_type=='taxi':
+        try:
+            taxi = Taxi.objects.get(poc_name=user, email=user.email)
+            if taxi.admin_approved==True:
+                return redirect('taxi:taxi')
+            else:
+                return HttpResponse("Admin approvel pending")
+        except:
+            return HttpResponse("Invalid Login")
+    
+    else:
+        return HttpResponse("Invalid Login")
 
 
 def landing_page(request):
