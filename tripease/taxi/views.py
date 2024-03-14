@@ -1,11 +1,38 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.contrib.auth import authenticate, login
 
 from tripease.decorators import allowed_users
 
 from .models import Taxi, Type
 
-from .forms import TaxiRegistrationForm
+from .forms import TaxiUserCreationForm, TaxiRegistrationForm
+
+
+def taxi_user_register(request):
+    if request.method == 'POST':
+        form = TaxiUserCreationForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data['username']
+            password=form.cleaned_data['password1']
+            form = form.save()
+            group = Group.objects.get(name="taxi")
+            form.groups.add(group)
+            form.save()
+            new_user = authenticate(username=username,
+                                    password=password,
+                                    )
+            login(request, new_user)
+
+        return redirect('taxi:register-taxi')
+    
+    form = TaxiUserCreationForm()
+    context = {
+        'form': form,
+        'name': "Taxi"
+    }
+    return render(request, 'registration/user_register.html', context)
 
 
 @login_required

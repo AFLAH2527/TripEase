@@ -1,11 +1,38 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.contrib.auth import authenticate, login
 
 from tripease.decorators import allowed_users
 
 from .models import Restaurant, Type
 
-from .forms import RestaurantRegistrationForm
+from .forms import RestaurantUserCreationForm, RestaurantRegistrationForm
+
+
+def restaurant_user_register(request):
+    if request.method == 'POST':
+        form = RestaurantUserCreationForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data['username']
+            password=form.cleaned_data['password1']
+            form = form.save()
+            group = Group.objects.get(name="restaurant")
+            form.groups.add(group)
+            form.save()
+            new_user = authenticate(username=username,
+                                    password=password,
+                                    )
+            login(request, new_user)
+
+        return redirect('restaurant:register-restaurant')
+    
+    form = RestaurantUserCreationForm()
+    context = {
+        'form': form,
+        'name': "Restaurant"
+    }
+    return render(request, 'registration/user_register.html', context)
 
 
 @login_required
