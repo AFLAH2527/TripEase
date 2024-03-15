@@ -65,6 +65,7 @@ def register_hotel(request):
         context = {
             'user':user,
             'hotel':hotel,
+            'types':types,
             'button':"Update"
         }
         return render(request, 'hotel/register_hotel.html', context)

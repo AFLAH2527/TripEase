@@ -44,6 +44,9 @@ def redirect_login(request):
         except:
             return HttpResponse("Invalid Login")
     
+    elif user_type=='traveler':
+        return redirect('traveler:traveler')
+
     else:
         return HttpResponse("Invalid Login")
 

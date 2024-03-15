@@ -26,6 +26,7 @@ urlpatterns = [
     path('hotel/', include('hotel.urls', namespace='hotel')),
     path('restaurant/', include('restaurant.urls', namespace='restaurant')),
     path('taxi/', include('taxi.urls', namespace='taxi')),
+    path('traveler/', include('traveler.urls', namespace='traveler')),
     path('auth/', include(urls)),
     path('redirect_login/', redirect_login, name='redirect-login'),
 ]
