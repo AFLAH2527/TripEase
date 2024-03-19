@@ -7,7 +7,7 @@ from tripease.decorators import allowed_users
 
 from .models import Traveler
 
-from .forms import TravelerUserCreationForm
+from .forms import TravelerUserCreationForm, TravelPlanForm
 
 
 def traveler_register(request):
@@ -38,8 +38,24 @@ def traveler_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'traveler'])
 def traveler(request):
-    travelers = Traveler.objects.all()
-    context = {
-        'travelers':travelers
-    }
+    if request.method == 'POST':
+        form = TravelPlanForm(request.POST)
+        if form.is_valid():
+            destination = form.cleaned_data['destination']
+            budget = form.cleaned_data['budget']
+            duration = form.cleaned_data['duration']
+            # Generate the itinerary based on user input (logic here)
+            #itinerary = generate_itinerary(destination, budget, duration)
+            # Render the itinerary to the user
+            print(destination)
+            print(budget)
+            print(duration)
+            return render(request, 'traveler/itinerary.html')
+    else:
+        form = TravelPlanForm()
+        context = {
+            'form':form
+        }
     return render(request, 'traveler/traveler.html', context)
+
+

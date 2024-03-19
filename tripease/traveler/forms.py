@@ -30,3 +30,9 @@ class TravelerUserCreationForm(UserCreationForm):
                 state=self.cleaned_data['state']
             )
         return user
+
+
+class TravelPlanForm(forms.Form):
+    destination = forms.CharField(label="Destination", max_length=100, required=True)
+    budget = forms.IntegerField(label="Budget (Total)", min_value=0, required=True)
+    duration = forms.IntegerField(label="Trip Duration (Days)", min_value=1, required=True)
