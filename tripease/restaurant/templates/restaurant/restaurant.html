@@ -6,8 +6,24 @@
     <title>Restaurant Dashboard</title>
 </head>
 <body>
-    {% for restaurant in restaurants %}
-      {{ restaurant.name }}
-    {% endfor %}
+    {{ restaurant }}
+    <br>
+    <hr>
+    <br>
+    <h1>Combo List</h1>
+    <ul>
+        {% for combo in combos %}
+            <li>
+                <h2>{{ combo.name }}</h2>
+                <p>Price: {{ combo.price }}</p>
+                <h3>Items:</h3>
+                <ul>
+                    {% for item in combo.items.all %}
+                        <li>{{ item.name }} - {{ item.price }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

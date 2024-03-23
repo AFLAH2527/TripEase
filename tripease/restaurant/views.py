@@ -5,10 +5,9 @@ from django.contrib.auth import authenticate, login
 
 from tripease.decorators import allowed_users
 
-from .models import Restaurant, Type
+from .models import Restaurant, Type, Combo, Item
 
-from .forms import RestaurantUserCreationForm, RestaurantRegistrationForm
-
+from .forms import RestaurantUserCreationForm, RestaurantRegistrationForm, AddMenuItemForm, AddMenuComboForm
 
 def restaurant_user_register(request):
     if request.method == 'POST':
@@ -38,9 +37,11 @@ def restaurant_user_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'restaurant'])
 def restaurant(request):
-    restaurants = Restaurant.objects.all()
+    restaurant = Restaurant.objects.get(poc_name=request.user.username)
+    combos = Combo.objects.filter(restaurant_name=restaurant.name)
     context = {
-        'restaurants':restaurants
+        'restaurant':restaurant,
+        'combos': combos
     }
     return render(request, 'restaurant/restaurant.html', context)
 
@@ -53,8 +54,8 @@ def register_restaurant(request):
     try:
         if request.method == 'POST':
             try:
-                hotel = Restaurant.objects.get(poc_name=user.username)
-                form = RestaurantRegistrationForm(request.POST, instance=hotel)
+                restaurant = Restaurant.objects.get(poc_name=user.username)
+                form = RestaurantRegistrationForm(request.POST, instance=restaurant)
             except:
                 form = RestaurantRegistrationForm(request.POST)
 
@@ -77,3 +78,70 @@ def register_restaurant(request):
             'button':"Register"
         }
         return render(request, 'restaurant/register_restaurant.html', context)
+    
+
+@login_required
+@allowed_users(allowed_roles = ['admin', 'restaurant'])
+def add_menu_item(request):
+    user = request.user
+    try:
+        if request.method == 'POST':
+            form = AddMenuItemForm(request.POST)
+            # try:
+            #     restaurant = Restaurant.objects.get(poc_name=user.username)
+            #     form = AddMenuItemsForm(request.POST, instance=restaurant)
+            # except:
+            #     form = AddMenuItemsForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+            return redirect('restaurant:restaurant')
+        
+        restaurant = Restaurant.objects.get(poc_name=user.username)
+        context = {
+            'restaurant':restaurant,
+            # 'button':"Update"
+        }
+        return render(request, 'restaurant/add_menu_item.html', context)
+        
+    except:
+        context = {
+            # 'button':"Register"
+        }
+        return render(request, 'restaurant/add_menu_item.html', context)
+    
+
+@login_required
+@allowed_users(allowed_roles = ['admin', 'restaurant'])
+def add_menu_combo(request):
+    user = request.user
+    try:
+        if request.method == 'POST':
+            form = AddMenuComboForm(request.POST)
+            # try:
+            #     restaurant = Restaurant.objects.get(poc_name=user.username)
+            #     form = AddMenuItemsForm(request.POST, instance=restaurant)
+            # except:
+            #     form = AddMenuItemsForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+            return redirect('restaurant:restaurant')
+        
+        restaurant = Restaurant.objects.get(poc_name=user.username)
+        items = Item.objects.filter(restaurant_name=restaurant.name)
+        context = {
+            'restaurant':restaurant,
+            'items': items            # 'button':"Update"
+        }
+        return render(request, 'restaurant/add_menu_combo.html', context)
+        
+    except:
+        context = {
+            # 'button':"Register"
+        }
+        return render(request, 'restaurant/add_menu_combo.html', context)
+
+
+
+

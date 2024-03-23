@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Menu Items - {{restaurant.name}}</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.restaurant_name }}
+
+            <label for="id_restaurant_name">Restaurant:</label>
+            <input type="text" name="restaurant_name" maxlength="50" required="" id="id_restaurant_name" readonly {% if restaurant %}value="{{restaurant.name}}"{% else %}{% endif %}">
+
+            <label for="id_name">Name:</label>
+            <input type="text" name="name" maxlength="50" required="" id="id_name">
+
+            <label for="id_price">Price:</label>
+            <input type="number" name="price" maxlength="10" required="" id="id_price">
+            
+            <label for="id_description">Description:</label>
+            <textarea name="description" id="id_description" cols="30" rows="10">
+            </textarea>
+        
+        <input type="submit">
+    </form>
+</body>
+</html>
