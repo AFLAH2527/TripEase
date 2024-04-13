@@ -59,3 +59,11 @@ def traveler(request):
     return render(request, 'traveler/traveler.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles = ['admin', 'traveler'])
+def traveler_loyalty(request):
+    return render(request, 'traveler/traveler_loyalty.html')
+
+
+
+

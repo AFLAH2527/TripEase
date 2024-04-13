@@ -6,8 +6,19 @@
     <title>Hotel Dashboard</title>
 </head>
 <body>
-    {% for hotel in hotels %}
-      {{ hotel.name }}
+    {{ hotel.name }}
+    <hr>
+    <a href="{% url 'hotel:add-rooms' %}">Add Room</a>
+    <!-- <a href="">Add Menu Combo</a> -->
+    <br><br>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+    <br>
+    {% for room in rooms %}
+      {{ room }}
+      <br>
     {% endfor %}
 </body>
 </html>

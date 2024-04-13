@@ -10,13 +10,13 @@
         {% csrf_token %}
 
         <label for="id_restaurant_name">Restaurant:</label>
-            <input type="text" name="restaurant_name" maxlength="50" required="" id="id_restaurant_name" readonly {% if restaurant %}value="{{restaurant.name}}"{% else %}{% endif %}">
+        <input type="text" name="restaurant_name" maxlength="50" required="" id="id_restaurant_name" readonly {% if restaurant %}value="{{restaurant.name}}"{% else %}{% endif %}">
 
-            <label for="id_name">Name:</label>
-            <input type="text" name="name" maxlength="50" required="" id="id_name">
+        <label for="id_name">Name:</label>
+        <input type="text" name="name" maxlength="50" required="" id="id_name">
 
-            <label for="id_price">Price:</label>
-            <input type="number" name="price" maxlength="10" required="" id="id_price">
+        <label for="id_price">Price:</label>
+        <input type="number" name="price" maxlength="10" required="" id="id_price">
 
         <select name="items" required="" id="id_items" multiple="" fdprocessedid="za106b">
 

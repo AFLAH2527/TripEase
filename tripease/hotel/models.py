@@ -21,3 +21,33 @@ class Hotel(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Room(models.Model):
+    hotel_name = models.CharField(max_length=50)
+    room_type = models.CharField(max_length=50)
+    price = models.IntegerField()
+    bathroom_attached = models.BooleanField(blank=True, null=True)
+    ac = models.BooleanField(blank=True, null=True)
+    count = models.IntegerField()
+
+    def __str__(self):
+        return self.room_type
+
+
+class RoomBooking(models.Model):
+    hotel_name = models.CharField(max_length=50)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    traveler_name = models.CharField(max_length=50)
+    no_of_days = models.IntegerField()
+    amount = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.traveler_name} - {self.room.room_type}'
+
+    def save(self, *args, **kwargs):
+        self.room.count -= 1
+        self.room.save()
+        super(RoomBooking, self).save(*args, **kwargs)
+
+

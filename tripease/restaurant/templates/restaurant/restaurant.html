@@ -9,6 +9,13 @@
     {{ restaurant }}
     <br>
     <hr>
+    <a href="{% url 'restaurant:add-menu-item' %}">Add Menu Item</a>
+    <a href="{% url 'restaurant:add-menu-combo' %}">Add Menu Combo</a>
+    <br>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
     <br>
     <h1>Combo List</h1>
     <ul>

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'restaurant',
     'hotel',
     'taxi',
-    'traveler'
+    'traveler',
+    'loyalty'
 ]
 
 MIDDLEWARE = [

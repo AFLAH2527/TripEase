@@ -5,9 +5,9 @@ from django.contrib.auth import authenticate, login
 
 from tripease.decorators import allowed_users
 
-from .models import Hotel, Type
+from .models import Hotel, Type, Room
 
-from .forms import HotelRegistrationForm, HotelUserCreationForm
+from .forms import HotelRegistrationForm, HotelUserCreationForm, AddRoomsForm
 
 
 def hotel_user_register(request):
@@ -37,9 +37,11 @@ def hotel_user_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'hotel'])
 def hotel(request):
-    hotels = Hotel.objects.all()
+    hotel = Hotel.objects.get(poc_name=request.user.username)
+    rooms = Room.objects.filter(hotel_name=hotel.name)
     context = {
-        'hotels':hotels
+        'hotel':hotel,
+        'rooms':rooms
     }
     return render(request, 'hotel/hotel.html', context)
 
@@ -77,3 +79,34 @@ def register_hotel(request):
             'button':"Register"
         }
         return render(request, 'hotel/register_hotel.html', context)
+
+
+def add_rooms(request):
+    user = request.user
+    try:
+        if request.method == 'POST':
+            form = AddRoomsForm(request.POST)
+            # try:
+            #     restaurant = Restaurant.objects.get(poc_name=user.username)
+            #     form = AddMenuItemsForm(request.POST, instance=restaurant)
+            # except:
+            #     form = AddMenuItemsForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+            return redirect('hotel:hotel')
+        
+        hotel = Hotel.objects.get(poc_name=user.username)
+        context = {
+            'hotel':hotel,
+            # 'button':"Update"
+        }
+        return render(request, 'hotel/add_rooms.html', context)
+        
+    except:
+        context = {
+            # 'button':"Register"
+        }
+        return render(request, 'hotel/add_rooms.html', context)
+    
+    

@@ -37,13 +37,21 @@ def restaurant_user_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'restaurant'])
 def restaurant(request):
-    restaurant = Restaurant.objects.get(poc_name=request.user.username)
-    combos = Combo.objects.filter(restaurant_name=restaurant.name)
-    context = {
-        'restaurant':restaurant,
-        'combos': combos
-    }
-    return render(request, 'restaurant/restaurant.html', context)
+    try:
+        restaurant = Restaurant.objects.get(poc_name=request.user.username)
+        combos = Combo.objects.filter(restaurant_name=restaurant.name)
+        context = {
+            'restaurant':restaurant,
+            'combos': combos
+        }
+        return render(request, 'restaurant/restaurant.html', context)
+    except:
+        #Admin Login
+        context = {
+            'restaurant':"Admin",
+        }
+        return render(request, 'restaurant/restaurant.html', context)
+    
 
 
 @login_required
@@ -61,7 +69,7 @@ def register_restaurant(request):
 
             if form.is_valid():
                 form.save()
-            return redirect('restaurant:restaurant')
+            return redirect('redirect-login')
         
         restaurant = Restaurant.objects.get(poc_name=user.username)
         context = {
