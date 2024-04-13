@@ -1,5 +1,7 @@
 from django.db import models
 
+from traveler.models import Destination
+
 class Type(models.Model):
     name = models.CharField(max_length=50)
 
@@ -21,6 +23,15 @@ class Hotel(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not Destination.objects.filter(name=self.place, district=self.district, state=self.state).exists():
+            Destination.objects.create(
+                name=self.place,
+                district=self.district,
+                state=self.state
+            )
+        super(Hotel, self).save(*args, **kwargs)
 
 
 class Room(models.Model):

@@ -1,4 +1,5 @@
 from django.db import models
+from traveler.models import Destination
 
 class Type(models.Model):
     name = models.CharField(max_length=50)
@@ -19,5 +20,18 @@ class Taxi(models.Model):
     location = models.CharField(max_length=100)
     admin_approved = models.BooleanField(default=False)
 
+    daily_rent = models.IntegerField()
+    km_charge = models.IntegerField()
+    available = models.BooleanField(default=True)
+
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not Destination.objects.filter(name=self.place, district=self.district, state=self.state).exists():
+            Destination.objects.create(
+                name=self.place,
+                district=self.district,
+                state=self.state
+            )
+        super(Taxi, self).save(*args, **kwargs)

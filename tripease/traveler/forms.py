@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Traveler
+from .models import Destination, Traveler
 
 class TravelerUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -33,6 +33,6 @@ class TravelerUserCreationForm(UserCreationForm):
 
 
 class TravelPlanForm(forms.Form):
-    destination = forms.CharField(label="Destination", max_length=100, required=True)
+    destination = forms.ModelChoiceField(queryset=Destination.objects.all(),label="Destination", required=True)
     budget = forms.IntegerField(label="Budget (Total)", min_value=0, required=True)
     duration = forms.IntegerField(label="Trip Duration (Days)", min_value=1, required=True)

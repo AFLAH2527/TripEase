@@ -6,8 +6,9 @@
     <title>Taxi Dashboard</title>
 </head>
 <body>
-    {% for taxi in taxis %}
       {{ taxi.name }}
-    {% endfor %}
+    <br>
+    Rent: {{ taxi.daily_rent }}
+    Charge: {{ taxi.km_charge }}
 </body>
 </html>

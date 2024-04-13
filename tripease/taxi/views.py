@@ -38,11 +38,19 @@ def taxi_user_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'taxi'])
 def taxi(request):
-    taxis = Taxi.objects.all()
-    context = {
-        'taxis':taxis
-    }
-    return render(request, 'taxi/taxi.html', context)
+    try:
+        taxi = Taxi.objects.get(poc_name=request.user.username)
+        context = {
+            'taxi':taxi,
+        }
+        return render(request, 'taxi/taxi.html', context)
+    except:
+        #Admin Login
+        context = {
+            'taxi':"Admin",
+        }
+        return render(request, 'taxi/taxi.html', context)
+    
 
 
 @login_required
@@ -60,7 +68,7 @@ def register_taxi(request):
 
             if form.is_valid():
                 form.save()
-            return redirect('taxi:taxi')
+            return redirect('redirect-login')
         
         taxi = Taxi.objects.get(poc_name=user.username)
         context = {
