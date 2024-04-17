@@ -35,3 +35,16 @@ class Taxi(models.Model):
                 state=self.state
             )
         super(Taxi, self).save(*args, **kwargs)
+
+
+class TaxiBooking(models.Model):
+    taxi = models.ForeignKey(Taxi, on_delete=models.CASCADE)
+    traveler_name = models.CharField(max_length=50)
+    pickup_location = models.CharField(max_length=100)
+    destination = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    total_rent = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.traveler_name} - {self.taxi.name}'

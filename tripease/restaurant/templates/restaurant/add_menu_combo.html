@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Combo - {{restaurant.name}}</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Add Menu Combo - {{ restaurant.name }}</title>
+{% endblock title %}
+
+{% block content %}
+
     <form action="" method="post">
         {% csrf_token %}
-
-        <label for="id_restaurant_name">Restaurant:</label>
-        <input type="text" name="restaurant_name" maxlength="50" required="" id="id_restaurant_name" readonly {% if restaurant %}value="{{restaurant.name}}"{% else %}{% endif %}">
+        Restaurant name: {{ restaurant.name }}
+        <label for="id_restaurant_name">Restaurant ID:</label>
+        <input type="text" name="restaurant_name" maxlength="50" required="" id="id_restaurant_name" readonly {% if restaurant %}value="{{restaurant.id}}"{% else %}{% endif %}">
 
         <label for="id_name">Name:</label>
         <input type="text" name="name" maxlength="50" required="" id="id_name">
@@ -28,5 +28,7 @@
 
         <input type="submit" value="Add">
     </form>
-</body>
-</html>
+
+{% endblock content %}  
+
+

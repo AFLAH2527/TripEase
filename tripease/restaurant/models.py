@@ -34,7 +34,7 @@ class Restaurant(models.Model):
     
 
 class Item(models.Model):
-    restaurant_name = models.CharField(max_length=100)
+    restaurant_name = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, null=True)
@@ -43,12 +43,23 @@ class Item(models.Model):
         return f"{self.name} || {self.restaurant_name}"
 
 class Combo(models.Model):
-    restaurant_name = models.CharField(max_length=100)
+    restaurant_name = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     items = models.ManyToManyField(Item, related_name='combos')
 
     def __str__(self):
-        return self.name
+        return f'{self.name}-{self.restaurant_name}'
+    
+
+class ComboBooking(models.Model):
+    restaurant_name = models.CharField(max_length=50)
+    combo = models.ForeignKey(Combo, on_delete=models.CASCADE)
+    traveler_name = models.CharField(max_length=50)
+    quantity = models.IntegerField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.traveler_name} - {self.combo.name}'
     
 

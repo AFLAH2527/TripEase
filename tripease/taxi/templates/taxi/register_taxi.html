@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reg Taxi Dashboard</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Reg Taxi</title>
+{% endblock title  %}
+
+{% block content %}
+  
     <form method="post" class="">
         {% csrf_token %}
         <div class="p-2 w-full">
@@ -75,13 +75,13 @@
         </div>
         <div class="p-2 w-1/2">
             <div class="relative">
-                <label for="daily_rent">Rent:</label>
+                <label for="daily_rent">Daily Rent:</label>
                 <input type="number" name="daily_rent" maxlength="50" required="" id="daily_rent" fdprocessedid="eerlia" value="{{taxi.location}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
             </div>
         </div>
         <div class="p-2 w-1/2">
             <div class="relative">
-                <label for="km_charge">KM Charge:</label>
+                <label for="km_charge">Extra KM Charge:</label>
                 <input type="number" name="km_charge" maxlength="50" required="" id="km_charge" fdprocessedid="eerlia" value="{{taxi.location}}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
             </div>
         </div>
@@ -90,5 +90,8 @@
         </div>
     
     </form>
-</body>
-</html>
+
+{% endblock content %}
+
+
+

@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login
 
 from tripease.decorators import allowed_users
 
-from .models import Hotel, Type, Room
+from .models import Hotel, Type, Room, RoomBooking
+from loyalty.models import LoyalPoint, LoyaltyCard
 
 from .forms import HotelRegistrationForm, HotelUserCreationForm, AddRoomsForm
 
@@ -38,7 +39,7 @@ def hotel_user_register(request):
 @allowed_users(allowed_roles = ['admin', 'hotel'])
 def hotel(request):
     hotel = Hotel.objects.get(poc_name=request.user.username)
-    rooms = Room.objects.filter(hotel_name=hotel.name)
+    rooms = Room.objects.filter(hotel_name=hotel.id)
     context = {
         'hotel':hotel,
         'rooms':rooms
@@ -61,7 +62,7 @@ def register_hotel(request):
 
             if form.is_valid():
                 form.save()
-            return redirect('hotel:hotel')
+            return redirect('redirect-login')
         
         hotel = Hotel.objects.get(poc_name=user.username)
         context = {
@@ -81,6 +82,8 @@ def register_hotel(request):
         return render(request, 'hotel/register_hotel.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles = ['admin', 'hotel'])
 def add_rooms(request):
     user = request.user
     try:
@@ -109,4 +112,45 @@ def add_rooms(request):
         }
         return render(request, 'hotel/add_rooms.html', context)
     
+
+@login_required
+@allowed_users(allowed_roles = ['admin', 'hotel', 'traveler'])
+def book_room(request, room_id):
+    room = Room.objects.get(pk=room_id)
+    traveler_name = request.user.username
+    amount = room.price
+    loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
+    loyalty_card = LoyaltyCard.objects.filter(card_holder=request.user.username).first()
+
+    if request.method == 'POST':
+        # Retrieve data from POST request
+        hotel_name = room.hotel_name
+        no_of_days = request.POST.get('no_of_days')
+        traveler_name = request.user.username
+        redeem_points = request.POST.get('redeem_points')
+        discount = loyalty_card.card.multiple_factor * int(redeem_points)
+        amount = room.price * int(no_of_days)
+
+        loyal_points.points_redeemed += int(redeem_points)
+        loyal_points.points_remain -= int(redeem_points)
+        loyal_points.save()
+
+        # Create RoomBooking object and save to database
+        room_booking = RoomBooking.objects.create(
+            hotel_name=hotel_name,
+            room=room,
+            traveler_name=traveler_name,
+            no_of_days=no_of_days,
+            amount=amount-discount
+        )
+        # Redirect to a success page after saving
+        return redirect('traveler:generate-itinerary')
     
+    context = {
+        'hotel_name': room.hotel_name.name,
+        'room_type': room.room_type,
+        'traveler_name': traveler_name,
+        'amount': amount,
+        'loyal_points': loyal_points
+    }
+    return render(request, 'hotel/book_room.html', context)

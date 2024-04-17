@@ -1,11 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerary - TripEase</title>
-</head>
-<body>
-    <h3>Itinerary</h3>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Itinerary {{ place }} - TripEase</title>
+{% endblock title  %}
+
+{% block content %}
+  
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Your Itinerary</h1>
+
+    <!-- Destination and Budget Info -->
+    <div class="bg-white shadow p-4 rounded mb-4">
+        <h2 class="text-xl font-bold mb-2">Destination: {{ destination }}</h2>
+        <p class="mb-2">Budget: ${{ budget }}</p>
+        <p class="mb-2">Duration: {{ duration }} days</p>
+    </div>
+
+    <!-- Rooms -->
+    <div class="bg-white shadow p-4 rounded mb-4">
+        <h2 class="text-xl font-bold mb-2">Rooms</h2>
+        <ul>
+            {% for room in rooms %}
+            <li>
+                {{ room.hotel_name.name }} - {{ room.room_type }} - ${{ room.price }}/night
+                <a href="{% url 'hotel:book-room' room.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Book Room
+                </a>
+            </li>
+            {% empty %}
+            <li>No rooms at this moment</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Restaurants -->
+    <div class="bg-white shadow p-4 rounded mb-4">
+        <h2 class="text-xl font-bold mb-2">Restaurants</h2>
+        <ul>
+            {% for combo in combos %}
+            <li>
+                {{ combo.restaurant_name.name }} - {{ combo.name }} - ${{ combo.price }}
+                <a href="{% url 'restaurant:book-combo' combo.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Book Combo
+                </a>
+            </li>
+            {% empty %}
+            <li>No combos at this moment</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Taxis -->
+    <div class="bg-white shadow p-4 rounded mb-4">
+        <h2 class="text-xl font-bold mb-2">Taxis</h2>
+        <ul>
+            {% for taxi in taxis %}
+            <li>
+                {{ taxi.name }} - ${{ taxi.daily_rent }}/day
+                <a href="{% url 'taxi:book-taxi' taxi.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Book Taxi
+                </a>
+            </li>
+            {% empty %}
+            <li>No available at this moment</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+

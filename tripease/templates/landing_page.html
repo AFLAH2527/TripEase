@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+
+{% block title %}
     <title>TripEase - Landing</title>
-</head>
-<body>
+{% endblock title  %}
+
+{% block content %}
+  
     <h1>This is the Landing Page</h1>
     <a href="{% url 'login' %}">Login</a>
     <a href="{% url 'traveler:traveler-register' %}">Register as Traveler</a>
     <a href="{% url 'hotel:hotel-user-register' %}">Register as Hotel</a>
     <a href="{% url 'restaurant:restaurant-user-register' %}">Register as Restaurant</a>
-    <a href="{% url 'taxi:taxi-user-register' %}">Register as Taxi</a>
-</body>
-</html>
+    <a href="{% url 'taxi:taxi-user-register' %}">Register as Taxi</a>    
+
+{% endblock content %}
+
+
+

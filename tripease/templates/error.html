@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+
+{% block title %}
     <title>Error</title>
-</head>
-<body>
+{% endblock title  %}
+
+{% block content %}
+  
     Error: {{ error }}
-</body>
-</html>
+
+{% endblock content %}
+
+
+
+

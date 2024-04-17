@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login
 
 from tripease.decorators import allowed_users
 
-from .models import Restaurant, Type, Combo, Item
+from .models import Restaurant, Type, Combo, Item, ComboBooking
+from loyalty.models import LoyaltyCard, LoyalPoint
 
 from .forms import RestaurantUserCreationForm, RestaurantRegistrationForm, AddMenuItemForm, AddMenuComboForm
 
@@ -39,7 +40,7 @@ def restaurant_user_register(request):
 def restaurant(request):
     try:
         restaurant = Restaurant.objects.get(poc_name=request.user.username)
-        combos = Combo.objects.filter(restaurant_name=restaurant.name)
+        combos = Combo.objects.filter(restaurant_name=restaurant.id)
         context = {
             'restaurant':restaurant,
             'combos': combos
@@ -137,7 +138,7 @@ def add_menu_combo(request):
             return redirect('restaurant:restaurant')
         
         restaurant = Restaurant.objects.get(poc_name=user.username)
-        items = Item.objects.filter(restaurant_name=restaurant.name)
+        items = Item.objects.filter(restaurant_name=restaurant.id)
         context = {
             'restaurant':restaurant,
             'items': items            # 'button':"Update"
@@ -151,5 +152,38 @@ def add_menu_combo(request):
         return render(request, 'restaurant/add_menu_combo.html', context)
 
 
+def book_combo(request, combo_id):
+    combo = Combo.objects.get(pk=combo_id)
+    traveler_name = request.user.username
+    loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
+    loyalty_card = LoyaltyCard.objects.filter(card_holder=request.user.username).first()
+    
+    if request.method == 'POST':
+        quantity = request.POST.get('quantity')
+        redeem_points = request.POST.get('redeem_points')
+        discount = loyalty_card.card.multiple_factor * int(redeem_points)
+        amount = combo.price * int(quantity)
 
+        loyal_points.points_redeemed += int(redeem_points)
+        loyal_points.points_remain -= int(redeem_points)
+        loyal_points.save()
+
+        combo_booking = ComboBooking.objects.create(
+            restaurant_name=combo.restaurant_name,
+            combo=combo,
+            traveler_name=traveler_name,
+            quantity=quantity,
+            amount=amount - discount
+        )
+
+        return redirect('traveler:generate-itinerary')  # Redirect to a success page after saving
+
+    context = {
+        'combo_name': combo.name,
+        'restaurant_name': combo.restaurant_name,
+        'traveler_name': traveler_name,
+        'combo_price': combo.price,
+        'loyal_points': loyal_points
+    }
+    return render(request, 'restaurant/book_combo.html', context)
 

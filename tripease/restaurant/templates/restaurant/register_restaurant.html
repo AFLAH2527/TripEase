@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reg Restaurant Dashboard</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Reg Restaurant</title>
+{% endblock title  %}
+
+{% block content %}
+  
     <form method="post" class="">
         {% csrf_token %}
         <div class="p-2 w-full">
@@ -77,6 +77,18 @@
             <button type="submit" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Register</button>
         </div>
     
-    </form>
+    </form>    
+
+{% endblock content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Dashboard</title>
+</head>
+<body>
+
 </body>
 </html>

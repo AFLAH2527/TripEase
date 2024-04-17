@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Book Taxi</title>
+{% endblock title %}
+
+{% block content %}
+
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Book Taxi</h1>
+    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="POST">
+        {% csrf_token %}
+        <!-- Taxi Name -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="taxi_name">
+                Taxi Name
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="taxi_name" type="text" placeholder="Taxi Name" name="taxi_name" value="{{ taxi_name }}" readonly>
+        </div>
+        <!-- Traveler Name -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="traveler_name">
+                Traveler Name
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="traveler_name" type="text" placeholder="Traveler Name" name="traveler_name" value="{{ traveler_name }}" readonly>
+        </div>
+        <!-- Pickup Location -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="pickup_location">
+                Pickup Location
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="pickup_location" type="text" placeholder="Pickup Location" name="pickup_location">
+        </div>
+        <!-- Destination -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="destination">
+                Destination
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="destination" type="text" placeholder="Destination" name="destination">
+        </div>
+        <!-- Start Date -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="start_date">
+                Start Date
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="start_date" type="date" name="start_date">
+        </div>
+        <!-- End Date -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="end_date">
+                End Date
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="end_date" type="date" name="end_date">
+        </div>
+        <!-- Total Rent -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="total_rent">
+                Rent per day
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="total_rent" type="number" placeholder="Total Rent" name="total_rent" value="{{ daily_rent }}" readonly>
+        </div>
+        <!-- Redeem Points -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="total_rent">
+                Redeem points
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="redeem_points" type="number" placeholder="redeem_points" name="redeem_points">
+        </div>
+        <!-- Submit Button -->
+        <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Confirm Booking
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

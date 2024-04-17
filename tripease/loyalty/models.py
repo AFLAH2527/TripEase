@@ -15,7 +15,7 @@ class CardType(models.Model):
 class LoyaltyCard(models.Model):
     card = models.ForeignKey(CardType, on_delete=models.CASCADE)
     card_holder = models.CharField(max_length=50)
-    duration = models.DurationField()
+    duration = models.IntegerField()
     total_points = models.IntegerField()
 
     def __str__(self):
@@ -24,11 +24,11 @@ class LoyaltyCard(models.Model):
 
 class LoyalPoint(models.Model):
     traveler = models.CharField(max_length=50)
-    card_points_remain = models.IntegerField()
-    earned_points_remain = models.IntegerField()
-    points_remain = models.IntegerField()
-    points_redeemed = models.IntegerField()
-    total_points = models.IntegerField()
+    card_points_remain = models.IntegerField(null=True)
+    earned_points_remain = models.IntegerField(null=True)
+    points_remain = models.IntegerField(null=True)
+    points_redeemed = models.IntegerField(null=True)
+    total_points = models.IntegerField(null=True)
 
     def __str__(self):
         return self.traveler

@@ -35,7 +35,7 @@ class Hotel(models.Model):
 
 
 class Room(models.Model):
-    hotel_name = models.CharField(max_length=50)
+    hotel_name = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     room_type = models.CharField(max_length=50)
     price = models.IntegerField()
     bathroom_attached = models.BooleanField(blank=True, null=True)
@@ -43,7 +43,7 @@ class Room(models.Model):
     count = models.IntegerField()
 
     def __str__(self):
-        return self.room_type
+        return f'{self.room_type}-{self.hotel_name}'
 
 
 class RoomBooking(models.Model):

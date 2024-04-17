@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Hotel - Book Room</title>
+{% endblock title %}
+
+{% block content %}
+  
+<div class="container mx-auto p-4">
+    <!-- Display earned loyal points -->
+    {% if loyal_points %}
+        <h2 class="text-2xl font-semibold mt-8">Your Loyal Points</h2>
+        <p>Total Points: {{ loyal_points.total_points }}</p>
+        <p>Redeemed Points: {{ loyal_points.points_redeemed }}</p>
+        <p>Points Remain: {{ loyal_points.points_remain }}</p>
+        <!-- Add more details about loyal points as needed -->
+    {% endif %}
+    
+    <h1 class="text-3xl font-bold mb-4">Book Room</h1>
+    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="POST">
+        {% csrf_token %}
+        <!-- Hotel Name -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="hotel_name">
+                Hotel Name
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="hotel_name" type="text" placeholder="Hotel Name" name="hotel_name" value="{{ hotel_name }}" readonly>
+        </div>
+        <!-- Room Type -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="room_type">
+                Room Type
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="room_type" type="text" placeholder="Room Type" name="room_type" value="{{ room_type }}" readonly>
+        </div>
+        <!-- Traveler Name -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="traveler_name">
+                Traveler Name
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="traveler_name" type="text" placeholder="Traveler Name" name="traveler_name" value="{{ traveler_name }}" readonly>
+        </div>
+        <!-- Amount -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="amount">
+                Amount per day
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="amount" type="number" placeholder="Amount" name="amount" value="{{ amount }}" readonly>
+        </div>
+        <!-- Number of Days -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="no_of_days">
+                Number of Days
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="no_of_days" type="number" placeholder="Number of Days" name="no_of_days">
+        </div>
+
+        <!-- Redeem Points -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="no_of_days">
+                Points to redeem
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="redeem_points" type="number" placeholder="Number of Days" name="redeem_points">
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Confirm Booking
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %} 

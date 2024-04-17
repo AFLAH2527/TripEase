@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+
+{% block title %}
     <title>Restaurant Dashboard</title>
-</head>
-<body>
+{% endblock title  %}
+
+{% block content %}
+  
     {{ restaurant }}
     <br>
     <hr>
@@ -31,6 +31,8 @@
                 </ul>
             </li>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </ul>    
+
+{% endblock content %}
+
+

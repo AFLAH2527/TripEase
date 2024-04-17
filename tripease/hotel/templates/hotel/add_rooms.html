@@ -1,16 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add rooms</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+
     <form action="" method="post">
         {% csrf_token %}
-
-        <label for="id_restaurant_name">Hotel:</label>
-        <input type="text" name="hotel_name" maxlength="50" required="" id="id_hotel_name" readonly {% if hotel %}value="{{hotel.name}}"{% else %}{% endif %}">
+        Hotel Name: {{ hotel.name }}
+        <label for="id_restaurant_name">Hotel ID:</label>
+        <input type="number" name="hotel_name" maxlength="50" required="" id="id_hotel_name" readonly {% if hotel %}value="{{hotel.id}}"{% else %}{% endif %}">
 
         <label for="id_room_type">Room type:</label>
         <input type="text" name="room_type" maxlength="50" required="" id="id_room_type">
@@ -30,5 +26,5 @@
         <input type="submit" value="Add">
 
     </form>
-</body>
-</html>
+      
+{% endblock content %}
