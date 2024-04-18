@@ -5,20 +5,49 @@
 {% endblock title %}
 
 {% block content %}
-  
-    {{ hotel.name }}
-    <hr>
-    <a href="{% url 'hotel:add-rooms' %}">Add Room</a>
-    <!-- <a href="">Add Menu Combo</a> -->
-    <br><br>
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-    <br>
-    {% for room in rooms %}
-    {{ room }}
-    <br>
-    {% endfor %}
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold">{{ hotel.name }}</h1>
+        <hr class="my-4">
+        <a href="{% url 'hotel:add-rooms' hotel.id %}" class="text-blue-500 hover:underline">Add Room</a>
+        <!-- <a href="" class="text-blue-500 hover:underline">Add Menu Combo</a> -->
+        <div class="mt-8">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Logout</button>
+            </form>
+        </div>
+        <div class="mt-8">
+            <h2 class="text-xl font-bold mb-4">Rooms</h2>
+            {% for room in rooms %}
+                <div class="border rounded p-4 mb-4">
+                    <a href="{% url 'hotel:update-room' room.id %}" class="text-lg font-semibold">{{ room.room_type }}</a>
+                    <p class="text-gray-700">Price: ${{ room.price }}</p>
+                    <p class="text-gray-700">Count: {{ room.count }}</p>
+                    <p class="text-gray-700">Bathroom Attached: {% if room.bathroom_attached %} Yes {% else %} No {% endif %}</p>
+                    <p class="text-gray-700">AC: {% if room.ac %} Yes {% else %} No {% endif %}</p>
+                    <!-- Add more room details here -->
+                </div>
+            {% empty %}
+                <p class="text-gray-700">No rooms available.</p>
+            {% endfor %}
+        </div>
 
-{% endblock content %}  
+        <div class="mt-8">
+            <h2 class="text-xl font-bold mb-4">Room Bookings</h2>
+            {% for booking in room_bookings %}
+                <div class="border rounded p-4 mb-4">
+                    <p class="text-lg font-semibold">{{ booking.traveler_name }}</p>
+                    <p class="text-gray-700">Room Type: {{ booking.room.room_type }}</p>
+                    <p class="text-gray-700">Start Date: {{ booking.start_date }}</p>
+                    <p class="text-gray-700">End Date: {{ booking.end_date }}</p>
+                    <p class="text-gray-700">Number of Days: {{ booking.no_of_days }}</p>
+                    <p class="text-gray-700">Amount: ${{ booking.amount }}</p>
+                </div>
+            {% empty %}
+                <p class="text-gray-700">No room bookings yet.</p>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+{% endblock content %}

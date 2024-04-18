@@ -11,7 +11,10 @@ def allowed_users(allowed_roles=[]):
             if group in allowed_roles:
                 return view_func(request, *args, **kwargs)
             else:
-                return render(request,"error.html")
+                context = {
+                    'error': "Unallowed user"
+                }
+                return render(request,"error.html", context)
 
         return wrapper_func
     return decorator

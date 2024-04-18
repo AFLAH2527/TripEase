@@ -22,7 +22,7 @@ def redirect_login(request):
             else:
                 return HttpResponse("Admin approvel pending")
         except:
-            return HttpResponse("Invalid Login")
+            return HttpResponse("No hotels registered under this user")
     
     elif user_type=='restaurant':
         try:
@@ -42,7 +42,7 @@ def redirect_login(request):
             else:
                 return HttpResponse("Admin approvel pending")
         except:
-            return HttpResponse("Invalid Login")
+            return HttpResponse("No taxis registered under this user")
     
     elif user_type=='traveler':
         return redirect('traveler:traveler')

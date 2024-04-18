@@ -38,8 +38,8 @@ class Room(models.Model):
     hotel_name = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     room_type = models.CharField(max_length=50)
     price = models.IntegerField()
-    bathroom_attached = models.BooleanField(blank=True, null=True)
-    ac = models.BooleanField(blank=True, null=True)
+    bathroom_attached = models.BooleanField(default=False)
+    ac = models.BooleanField(default=False)
     count = models.IntegerField()
 
     def __str__(self):

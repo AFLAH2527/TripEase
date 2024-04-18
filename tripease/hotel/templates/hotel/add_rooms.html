@@ -2,29 +2,78 @@
 
 {% block content %}
 
-    <form action="" method="post">
-        {% csrf_token %}
-        Hotel Name: {{ hotel.name }}
-        <label for="id_restaurant_name">Hotel ID:</label>
-        <input type="number" name="hotel_name" maxlength="50" required="" id="id_hotel_name" readonly {% if hotel %}value="{{hotel.id}}"{% else %}{% endif %}">
+    {% if hotel %}
 
-        <label for="id_room_type">Room type:</label>
-        <input type="text" name="room_type" maxlength="50" required="" id="id_room_type">
+        <form action="" method="post" class="max-w-md mx-auto">
+            {% csrf_token %}
+            <div class="mb-4">
+                <p class="font-bold">Hotel Name: {{ hotel.name }}</p>
+                <input type="hidden" name="hotel_name" value="{{ hotel.id }}" readonly>
+            </div>
+            <div class="mb-4">
+                <label for="id_room_type" class="block text-gray-700 font-bold mb-2">Room type:</label>
+                <input type="text" name="room_type" id="id_room_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="mb-4">
+                <label for="id_price" class="block text-gray-700 font-bold mb-2">Price:</label>
+                <input type="number" name="price" id="id_price" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="mb-4">
+                <input type="checkbox" name="bathroom_attached" id="id_bathroom_attached" class="mr-2">
+                <label for="id_bathroom_attached">Bathroom Attached</label>
+            </div>
+            <div class="mb-4">
+                <input type="checkbox" name="ac" id="id_ac" class="mr-2">
+                <label for="id_ac">AC</label>
+            </div>
+            <div class="mb-4">
+                <label for="id_count" class="block text-gray-700 font-bold mb-2">Count:</label>
+                <input type="number" name="count" id="id_count" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <input type="submit" value="Add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            </div>
+        </form>
+    
+    {% else %}
 
-        <label for="id_price">Price:</label>
-        <input type="number" name="price" maxlength="50" required="" id="id_price">
+        <form action="" method="post" class="max-w-md mx-auto">
+            {% csrf_token %}
+            <div class="mb-4">
+                <p class="font-bold">Hotel Name: {{ room.hotel_name.name }}</p>
+                <input type="hidden" name="hotel_name" value="{{ room.hotel_name.id }}" readonly>
+            </div>
+            <div class="mb-4">
+                <label for="id_room_type" class="block text-gray-700 font-bold mb-2">Room type:</label>
+                <input type="text" name="room_type" id="id_room_type" value="{{ room.room_type }}"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="mb-4">
+                <label for="id_price" class="block text-gray-700 font-bold mb-2">Price:</label>
+                <input type="number" name="price" id="id_price" value="{{ room.price }}"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="mb-4">
+                <input type="checkbox" name="bathroom_attached" id="id_bathroom_attached" {% if room.bathroom_attached %}checked{% endif %}
+                class="mr-2">
+                <label for="id_bathroom_attached">Bathroom Attached</label>
+            </div>
+            <div class="mb-4">
+                <input type="checkbox" name="ac" id="id_ac" {% if room.ac %}checked{% endif %}
+                class="mr-2">
+                <label for="id_ac">AC</label>
+            </div>
+            <div class="mb-4">
+                <label for="id_count" class="block text-gray-700 font-bold mb-2">Count:</label>
+                <input type="number" name="count" id="id_count" value="{{ room.count }}"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <input type="submit" value="Add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            </div>
+        </form>
+    
+    {% endif %}
 
-        <input type="checkbox" name="bathroom_attached" maxlength="50" id="id_bathroom_attached">
-        <label for="id_bathroom_attached">Bathroom Attached</label>
 
-        <input type="checkbox" name="ac" id="id_ac">
-        <label for="id_ac">AC</label>
-
-        <label for="id_count">Count:</label>
-        <input type="number" name="count" maxlength="50" id="id_count">
-
-        <input type="submit" value="Add">
-
-    </form>
-      
 {% endblock content %}

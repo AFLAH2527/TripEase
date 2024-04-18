@@ -6,10 +6,60 @@
 
 {% block content %}
   
-    <form action="" method="post">
+    <form action="" method="post" class="max-w-md mx-auto">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit">
+        <div class="mb-4">
+            <label for="id_username" class="block text-gray-700 font-bold">Username:</label>
+            <input type="text" name="username" id="id_username" maxlength="150" autofocus="" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" aria-describedby="id_username_helptext">
+            <div id="id_username_helptext" class="text-sm text-gray-600">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</div>
+        </div>
+        <div class="mb-4">
+            <label for="id_email" class="block text-gray-700 font-bold">Email:</label>
+            <input type="email" name="email" id="id_email" maxlength="320" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div class="mb-4">
+            <label for="id_password1" class="block text-gray-700 font-bold">Password:</label>
+            <input type="password" name="password1" id="id_password1" autocomplete="new-password" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" aria-describedby="id_password1_helptext">
+            <div id="id_password1_helptext" class="text-sm text-gray-600">
+                <ul>
+                    <li>Your password can’t be too similar to your other personal information.</li>
+                    <li>Your password must contain at least 8 characters.</li>
+                    <li>Your password can’t be a commonly used password.</li>
+                    <li>Your password can’t be entirely numeric.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="id_password2" class="block text-gray-700 font-bold">Password confirmation:</label>
+            <input type="password" name="password2" id="id_password2" autocomplete="new-password" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" aria-describedby="id_password2_helptext">
+            <div id="id_password2_helptext" class="text-sm text-gray-600">Enter the same password as before, for verification.</div>
+        </div>
+
+        {% if name %}
+            <div class="mb-4">
+                <label for="id_name" class="block text-gray-700 font-bold">Name:</label>
+                <input type="text" name="name" id="id_name" maxlength="100" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="id_phone" class="block text-gray-700 font-bold">Phone:</label>
+                <input type="tel" name="phone" id="id_phone" maxlength="15" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="id_native_place" class="block text-gray-700 font-bold">Native Place:</label>
+                <input type="text" name="native_place" id="id_native_place" maxlength="100" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="id_district" class="block text-gray-700 font-bold">District:</label>
+                <input type="text" name="district" id="id_district" maxlength="50" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="id_state" class="block text-gray-700 font-bold">State:</label>
+                <input type="text" name="state" id="id_state" maxlength="50" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            
+        {% endif %}
+
+        <input type="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
     </form>
 
 {% endblock content %}

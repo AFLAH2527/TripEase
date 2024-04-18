@@ -42,10 +42,12 @@ def hotel_user_register(request):
 @allowed_users(allowed_roles = ['admin', 'hotel'])
 def hotel(request):
     hotel = Hotel.objects.get(poc_name=request.user.username)
-    rooms = Room.objects.filter(hotel_name=hotel.id)
+    rooms = Room.objects.filter(hotel_name=hotel)
+    room_bookings = RoomBooking.objects.filter(room__in=rooms)
     context = {
         'hotel':hotel,
-        'rooms':rooms
+        'rooms':rooms,
+        'room_bookings': room_bookings
     }
     return render(request, 'hotel/hotel.html', context)
 
@@ -69,10 +71,10 @@ def register_hotel(request):
         
         hotel = Hotel.objects.get(poc_name=user.username)
         context = {
-            'user':user,
-            'hotel':hotel,
-            'types':types,
-            'button':"Update"
+            'user': user,
+            'hotel': hotel,
+            'types': types,
+            'button': "Update"
         }
         return render(request, 'hotel/register_hotel.html', context)
         
@@ -87,33 +89,37 @@ def register_hotel(request):
 
 @login_required
 @allowed_users(allowed_roles = ['admin', 'hotel'])
-def add_rooms(request):
-    user = request.user
-    try:
-        if request.method == 'POST':
-            form = AddRoomsForm(request.POST)
-            # try:
-            #     restaurant = Restaurant.objects.get(poc_name=user.username)
-            #     form = AddMenuItemsForm(request.POST, instance=restaurant)
-            # except:
-            #     form = AddMenuItemsForm(request.POST)
+def add_rooms(request, id):
+    hotel = Hotel.objects.get(id=id)
 
-            if form.is_valid():
-                form.save()
-            return redirect('hotel:hotel')
-        
-        hotel = Hotel.objects.get(poc_name=user.username)
-        context = {
-            'hotel':hotel,
-            # 'button':"Update"
-        }
-        return render(request, 'hotel/add_rooms.html', context)
-        
-    except:
-        context = {
-            # 'button':"Register"
-        }
-        return render(request, 'hotel/add_rooms.html', context)
+    if request.method == 'POST':
+        form = AddRoomsForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('hotel:hotel')    
+
+    context = {
+        'hotel':hotel,
+        'form': AddRoomsForm()
+    }
+    return render(request, 'hotel/add_rooms.html', context)
+
+@login_required
+@allowed_users(allowed_roles = ['admin', 'hotel'])
+def update_room(request, id):
+    room = Room.objects.get(id=id)
+
+    if request.method == 'POST':
+        form = AddRoomsForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save()
+        return redirect('hotel:hotel')    
+
+    context = {
+        'room':room,
+        'form': AddRoomsForm(instance=room)
+    }
+    return render(request, 'hotel/add_rooms.html', context)
     
 
 @login_required
