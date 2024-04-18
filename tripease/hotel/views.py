@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
 
+from datetime import datetime
+
 from tripease.decorators import allowed_users
 
 from .models import Hotel, Type, Room, RoomBooking
@@ -139,10 +141,13 @@ def book_room(request, room_id):
     if request.method == 'POST':
         
         hotel_name = room.hotel_name
-        no_of_days = request.POST.get('no_of_days')
+
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        no_of_days = (datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(start_date, '%Y-%m-%d')).days + 1
+
         traveler_name = request.user.username
         redeem_points = request.POST.get('redeem_points')
-        print(multiple_factor)
         discount = multiple_factor * int(redeem_points)
         amount = room.price * int(no_of_days)
         
@@ -152,34 +157,40 @@ def book_room(request, room_id):
         elif loyal_points is not None and loyal_points.points_remain < int(redeem_points):
             messages.error(request, 'Points to redeem is greater than the available')
 
-        elif loyal_points is None:
-            if int(redeem_points) > 0:
-                messages.error(request, 'No available points to redeem')
+        else:
+            # Create or update loyalty points
+            if loyal_points is None:
+                if int(redeem_points) > 0:
+                    messages.error(request, 'No available points to redeem')
+                else:
+                    # Create room booking
+                    room_booking = RoomBooking.objects.create(
+                        hotel_name=hotel_name,
+                        room=room,
+                        traveler_name=traveler_name,
+                        start_date=start_date,
+                        end_date=end_date,
+                        no_of_days=no_of_days,
+                        amount=amount - discount
+                    )
+                    return redirect('traveler:generate-itinerary')
             else:
+                # Update loyalty points
+                loyal_points.points_redeemed += int(redeem_points)
+                loyal_points.points_remain -= int(redeem_points)
+                loyal_points.save()
+
+                # Create room booking
                 room_booking = RoomBooking.objects.create(
                     hotel_name=hotel_name,
                     room=room,
                     traveler_name=traveler_name,
+                    start_date=start_date,
+                    end_date=end_date,
                     no_of_days=no_of_days,
-                    amount=amount-discount
+                    amount=amount - discount
                 )
-            
                 return redirect('traveler:generate-itinerary')
-            
-        elif loyal_points is not None:
-            loyal_points.points_redeemed += int(redeem_points)
-            loyal_points.points_remain -= int(redeem_points)
-            loyal_points.save()
-
-            room_booking = RoomBooking.objects.create(
-                hotel_name=hotel_name,
-                room=room,
-                traveler_name=traveler_name,
-                no_of_days=no_of_days,
-                amount=amount-discount
-            )
-            
-            return redirect('traveler:generate-itinerary')
     
     context = {
         'hotel_name': room.hotel_name.name,

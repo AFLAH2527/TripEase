@@ -173,6 +173,7 @@ def book_combo(request, combo_id):
         multiple_factor = 3
     
     if request.method == 'POST':
+        food_date = request.POST.get('food_date')
         quantity = request.POST.get('quantity')
         redeem_points = request.POST.get('redeem_points')
         discount = multiple_factor * int(redeem_points)
@@ -193,7 +194,8 @@ def book_combo(request, combo_id):
                     combo=combo,
                     traveler_name=traveler_name,
                     quantity=quantity,
-                    amount=amount - discount
+                    amount=amount - discount,
+                    food_date=food_date
                 )
 
                 return redirect('traveler:generate-itinerary')
@@ -208,7 +210,8 @@ def book_combo(request, combo_id):
                 combo=combo,
                 traveler_name=traveler_name,
                 quantity=quantity,
-                amount=amount - discount
+                amount=amount - discount,
+                food_date=food_date
             )
             
             return redirect('traveler:generate-itinerary')

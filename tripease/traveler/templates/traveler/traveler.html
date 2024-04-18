@@ -36,14 +36,26 @@
         <div class="mt-8">
             <h2 class="text-2xl font-bold mb-4">Your Bookings</h2>
 
-            <!-- Room Bookings -->
+            <!-- Room Bookings - Upcoming -->
             <div class="mb-8">
-                <h3 class="text-xl font-bold mb-2">Room Bookings</h3>
+                <h3 class="text-xl font-bold mb-2">Upcoming Room Bookings</h3>
                 <ul>
-                    {% for room_booking in room_bookings %}
+                    {% for room_booking in room_bookings_upcoming %}
                         <li>{{ room_booking }} - {{ room_booking.no_of_days }} - ${{ room_booking.amount }}</li>
                     {% empty %}
-                        <li>No room bookings yet.</li>
+                        <li>No upcoming room bookings.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Room Bookings - Completed -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-2">Completed Room Bookings</h3>
+                <ul>
+                    {% for room_booking in room_bookings_completed %}
+                        <li>{{ room_booking }} - {{ room_booking.no_of_days }} - ${{ room_booking.amount }}</li>
+                    {% empty %}
+                        <li>No completed room bookings.</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -51,11 +63,23 @@
             <!-- Combo Bookings -->
             <div class="mb-8">
                 <h3 class="text-xl font-bold mb-2">Combo Bookings</h3>
+                <!-- Upcoming Combo Bookings -->
+                <h4 class="text-lg font-bold mb-2">Upcoming</h4>
                 <ul>
-                    {% for combo_booking in combo_bookings %}
-                        <li>{{ combo_booking }} - {{ combo_booking.quantity }} - {{ combo_booking.amount }}</li>
+                    {% for upcoming_combo_booking in upcoming_combo_bookings %}
+                        <li>{{ upcoming_combo_booking }} - {{ upcoming_combo_booking.quantity }} - {{ upcoming_combo_booking.food_date }}</li>
                     {% empty %}
-                        <li>No combo bookings yet.</li>
+                        <li>No upcoming combo bookings.</li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Completed Combo Bookings -->
+                <h4 class="text-lg font-bold mb-2">Completed</h4>
+                <ul>
+                    {% for completed_combo_booking in completed_combo_bookings %}
+                        <li>{{ completed_combo_booking }} - {{ completed_combo_booking.quantity }} - {{ completed_combo_booking.food_date }}</li>
+                    {% empty %}
+                        <li>No completed combo bookings.</li>
                     {% endfor %}
                 </ul>
             </div>

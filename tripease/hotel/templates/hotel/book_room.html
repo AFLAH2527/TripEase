@@ -58,22 +58,27 @@
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="amount" type="number" placeholder="Amount" name="amount" value="{{ amount }}" readonly>
         </div>
-        <!-- Number of Days -->
+        <!-- Start Date -->
         <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="no_of_days">
-                Number of Days
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="start_date">
+                Start Date
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="no_of_days" type="number" placeholder="Number of Days" name="no_of_days">
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="start_date" type="date" placeholder="Start Date" name="start_date">
         </div>
-
+        <!-- End Date -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="end_date">
+                End Date
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="end_date" type="date" placeholder="End Date" name="end_date">
+        </div>
         <!-- Redeem Points -->
         <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="no_of_days">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="redeem_points">
                 Points to redeem
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="redeem_points" type="number" placeholder="redeem_points" name="redeem_points">
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="redeem_points" type="number" placeholder="Redeem Points" name="redeem_points">
         </div>
-        
         <!-- Submit Button -->
         <div class="flex items-center justify-between">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -81,6 +86,7 @@
             </button>
         </div>
     </form>
+    
 </div>
 
 {% endblock content %} 

@@ -50,6 +50,8 @@ class RoomBooking(models.Model):
     hotel_name = models.CharField(max_length=50)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     traveler_name = models.CharField(max_length=50)
+    start_date = models.DateField()
+    end_date = models.DateField()
     no_of_days = models.IntegerField()
     amount = models.IntegerField()
 
@@ -59,6 +61,7 @@ class RoomBooking(models.Model):
     def save(self, *args, **kwargs):
         self.room.count -= 1
         self.room.save()
+
         super(RoomBooking, self).save(*args, **kwargs)
 
 

@@ -110,6 +110,7 @@ def traveler(request):
         pass
 
     room_bookings = combo_bookings = taxi_bookings = None
+    room_bookings_upcoming = room_bookings_completed = None
 
     if request.method == 'POST':
         travel_plan_form = TravelPlanForm(request.POST)
@@ -122,21 +123,32 @@ def traveler(request):
             request.session['taxi_percentage'] = travel_plan_form.cleaned_data['taxi_percentage']
             # Generate the itinerary based on user input (logic here)
             return redirect('traveler:generate-itinerary')
-            #(request, destination, budget, duration, hotel_percentage, restaurant_percentage, taxi_percentage)
-            # Render the itinerary to the user
-            # return render(request, 'traveler/itinerary.html')
+            
     else:
         traveler_name = request.user.username
         room_bookings = RoomBooking.objects.filter(traveler_name=traveler_name)
         combo_bookings = ComboBooking.objects.filter(traveler_name=traveler_name)
         taxi_bookings = TaxiBooking.objects.filter(traveler_name=traveler_name)
+
+        # Filter room bookings based on start and end dates
+        current_date = timezone.now().date()
+        room_bookings_upcoming = room_bookings.filter(start_date__gt=current_date)
+        room_bookings_completed = room_bookings.filter(end_date__lte=current_date)
+
+        # Separate upcoming and completed Combo Bookings
+        upcoming_combo_bookings = combo_bookings.filter(food_date__gte=timezone.now().date())
+        completed_combo_bookings = combo_bookings.filter(food_date__lt=timezone.now().date())
         
     loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
 
     context = {
             'travel_plan_form': TravelPlanForm(),
             'room_bookings': room_bookings,
+            'room_bookings_upcoming': room_bookings_upcoming,
+            'room_bookings_completed': room_bookings_completed,
             'combo_bookings': combo_bookings,
+            'upcoming_combo_bookings': upcoming_combo_bookings,
+            'completed_combo_bookings': completed_combo_bookings,
             'taxi_bookings': taxi_bookings,
             'loyal_points': loyal_points
     }

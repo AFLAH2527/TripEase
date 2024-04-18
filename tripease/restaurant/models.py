@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from traveler.models import Destination
 
 class Type(models.Model):
@@ -58,6 +60,8 @@ class ComboBooking(models.Model):
     traveler_name = models.CharField(max_length=50)
     quantity = models.IntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    booking_date = models.DateTimeField(default=timezone.now)
+    food_date = models.DateField()
 
     def __str__(self):
         return f'{self.traveler_name} - {self.combo.name}'
