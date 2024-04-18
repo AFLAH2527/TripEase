@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
@@ -119,32 +120,66 @@ def book_room(request, room_id):
     room = Room.objects.get(pk=room_id)
     traveler_name = request.user.username
     amount = room.price
-    loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
-    loyalty_card = LoyaltyCard.objects.filter(card_holder=request.user.username).first()
+
+    loyal_points = None
+    try:
+        loyal_points = LoyalPoint.objects.get(traveler=request.user.username)
+    except:
+        pass
+    
+    try:
+        loyalty_card = LoyaltyCard.objects.get(card_holder=request.user.username)
+        if loyalty_card.active:
+            multiple_factor = loyalty_card.card.multiple_factor
+        else:
+            multiple_factor = 3
+    except:
+        multiple_factor = 3
 
     if request.method == 'POST':
-        # Retrieve data from POST request
+        
         hotel_name = room.hotel_name
         no_of_days = request.POST.get('no_of_days')
         traveler_name = request.user.username
         redeem_points = request.POST.get('redeem_points')
-        discount = loyalty_card.card.multiple_factor * int(redeem_points)
+        print(multiple_factor)
+        discount = multiple_factor * int(redeem_points)
         amount = room.price * int(no_of_days)
+        
+        if amount < discount:
+            messages.error(request, f'Discount:{discount} cannot be greater than the total amount:{amount}')
 
-        loyal_points.points_redeemed += int(redeem_points)
-        loyal_points.points_remain -= int(redeem_points)
-        loyal_points.save()
+        elif loyal_points is not None and loyal_points.points_remain < int(redeem_points):
+            messages.error(request, 'Points to redeem is greater than the available')
 
-        # Create RoomBooking object and save to database
-        room_booking = RoomBooking.objects.create(
-            hotel_name=hotel_name,
-            room=room,
-            traveler_name=traveler_name,
-            no_of_days=no_of_days,
-            amount=amount-discount
-        )
-        # Redirect to a success page after saving
-        return redirect('traveler:generate-itinerary')
+        elif loyal_points is None:
+            if int(redeem_points) > 0:
+                messages.error(request, 'No available points to redeem')
+            else:
+                room_booking = RoomBooking.objects.create(
+                    hotel_name=hotel_name,
+                    room=room,
+                    traveler_name=traveler_name,
+                    no_of_days=no_of_days,
+                    amount=amount-discount
+                )
+            
+                return redirect('traveler:generate-itinerary')
+            
+        elif loyal_points is not None:
+            loyal_points.points_redeemed += int(redeem_points)
+            loyal_points.points_remain -= int(redeem_points)
+            loyal_points.save()
+
+            room_booking = RoomBooking.objects.create(
+                hotel_name=hotel_name,
+                room=room,
+                traveler_name=traveler_name,
+                no_of_days=no_of_days,
+                amount=amount-discount
+            )
+            
+            return redirect('traveler:generate-itinerary')
     
     context = {
         'hotel_name': room.hotel_name.name,

@@ -11,10 +11,24 @@ from .models import LoyaltyCard, CardType, LoyalPoint
 def loyalty_dashboard(request):
     return render(request, 'loyalty/loyalty_dashboard.html')
 
-
+@login_required
+@allowed_users(allowed_roles = ['admin','traveler'])
 def purchase_card(request):
     # Get available card types
     available_card_types = CardType.objects.all()
+
+    try:
+        loyalty_card = LoyaltyCard.objects.get(card_holder=request.user.username)
+        if loyalty_card.active:
+            context = {
+                'active': "You already have an active card",
+                'loyalty_card': loyalty_card
+            }
+            return render(request, 'loyalty/purchase_card.html', context)
+        
+    except:
+        pass
+    
 
     if request.method == 'POST':
         form = LoyaltyCardPurchaseForm(request.POST)
@@ -52,19 +66,19 @@ def purchase_card(request):
 
 def add_loyal_points(request, card_points):
     # Get the logged-in user's loyalty points instance if it exists, or create a new one
-    loyal_point, created = LoyalPoint.objects.get_or_create(traveler=request.user.username, defaults={'card_points_remain': 0})
+    loyal_point, created = LoyalPoint.objects.get_or_create(traveler=request.user.username, defaults={'card_points_purchased': 0})
 
     # Update the loyalty points based on the purchased card
     if created:
         # If a new instance was created, set initial values
-        loyal_point.card_points_remain = card_points
-        loyal_point.earned_points_remain = 0
+        loyal_point.card_points_purchased = card_points
+        loyal_point.earned_points = 0
         loyal_point.points_remain = card_points
         loyal_point.points_redeemed = 0
         loyal_point.total_points = card_points
     else:
         # If the user already has existing points, update them
-        loyal_point.card_points_remain += card_points
+        loyal_point.card_points_purchased += card_points
         loyal_point.points_remain += card_points
         loyal_point.total_points += card_points
 

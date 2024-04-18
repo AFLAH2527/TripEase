@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
@@ -93,8 +94,21 @@ def register_taxi(request):
 def book_taxi(request, taxi_id):
     taxi = Taxi.objects.get(pk=taxi_id)
     traveler_name = request.user.username
-    loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
-    loyalty_card = LoyaltyCard.objects.filter(card_holder=request.user.username).first()
+    
+    loyal_points = None
+    try:
+        loyal_points = LoyalPoint.objects.get(traveler=request.user.username)
+    except:
+        pass
+    
+    try:
+        loyalty_card = LoyaltyCard.objects.get(card_holder=request.user.username)
+        if loyalty_card.active:
+            multiple_factor = loyalty_card.card.multiple_factor
+        else:
+            multiple_factor = 3
+    except:
+        multiple_factor = 3
     
     if request.method == 'POST':
         pickup_location = request.POST.get('pickup_location')
@@ -106,33 +120,59 @@ def book_taxi(request, taxi_id):
         end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%d')
         duration = end_date - start_date + timedelta(days=1)
         redeem_points = request.POST.get('redeem_points')
-        discount = loyalty_card.card.multiple_factor * int(redeem_points)
+        discount = multiple_factor * int(redeem_points)
         total_rent = taxi.daily_rent * duration.days
 
-        loyal_points.points_redeemed += int(redeem_points)
-        loyal_points.points_remain -= int(redeem_points)
-        loyal_points.save()
+        if total_rent < discount:
+            messages.error(request, f'Discount:{discount} cannot be greater than the total amount:{total_rent}')
 
-        taxi_booking = TaxiBooking.objects.create(
-            taxi=taxi,
-            traveler_name=traveler_name,
-            pickup_location=pickup_location,
-            destination=destination,
-            start_date=start_date,
-            end_date=end_date,
-            total_rent=total_rent - discount
-        )
+        elif loyal_points is not None and loyal_points.points_remain < int(redeem_points):
+            messages.error(request, 'Points to redeem is greater than the available')
 
-        # Set the available field of the corresponding Taxi to False
-        taxi.available = False
-        taxi.save()
+        elif loyal_points is None:
+            if int(redeem_points) > 0:
+                messages.error(request, 'No available points to redeem')
+            else:
+                taxi_booking = TaxiBooking.objects.create(
+                    taxi=taxi,
+                    traveler_name=traveler_name,
+                    pickup_location=pickup_location,
+                    destination=destination,
+                    start_date=start_date,
+                    end_date=end_date,
+                    total_rent=total_rent - discount
+                )
+                # Set the available field of the corresponding Taxi to False
+                taxi.available = False
+                taxi.save()
+            
+                return redirect('traveler:generate-itinerary')
+            
+        elif loyal_points is not None:
+            loyal_points.points_redeemed += int(redeem_points)
+            loyal_points.points_remain -= int(redeem_points)
+            loyal_points.save()
 
-        return redirect('traveler:generate-itinerary')  # Redirect to a success page after saving
+            taxi_booking = TaxiBooking.objects.create(
+                taxi=taxi,
+                traveler_name=traveler_name,
+                pickup_location=pickup_location,
+                destination=destination,
+                start_date=start_date,
+                end_date=end_date,
+                total_rent=total_rent - discount
+            )
+            # Set the available field of the corresponding Taxi to False
+            taxi.available = False
+            taxi.save()
+            
+            return redirect('traveler:generate-itinerary')
 
     context = {
         'taxi_name': taxi.name,
         'traveler_name': traveler_name,
-        'daily_rent': taxi.daily_rent
+        'daily_rent': taxi.daily_rent,
+        'loyal_points': loyal_points
     }
     return render(request, 'taxi/book_taxi.html', context)
 

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
@@ -9,7 +10,7 @@ from .models import Traveler
 from hotel.models import Hotel, Room, RoomBooking
 from restaurant.models import Restaurant, Combo, ComboBooking
 from taxi.models import Taxi, TaxiBooking
-from loyalty.models import LoyalPoint
+from loyalty.models import LoyalPoint, LoyaltyCard
 
 from .forms import TravelerUserCreationForm, TravelPlanForm
 from loyalty.forms import LoyaltyCardPurchaseForm
@@ -99,7 +100,17 @@ def traveler_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'traveler'])
 def traveler(request):
+
+    # Update current date of the Loyalty Card
+    try:
+        loyalty_card = LoyaltyCard.objects.get(card_holder=request.user.username, active=True)
+        loyalty_card.current_date = timezone.now().date()
+        loyalty_card.save()
+    except:
+        pass
+
     room_bookings = combo_bookings = taxi_bookings = None
+
     if request.method == 'POST':
         travel_plan_form = TravelPlanForm(request.POST)
         if travel_plan_form.is_valid():

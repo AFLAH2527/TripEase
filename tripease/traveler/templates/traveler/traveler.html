@@ -11,11 +11,14 @@
 
         <!-- Display earned loyal points -->
         {% if loyal_points %}
-            <p><a href="{% url 'loyalty:purchase-card' %}" class="text-blue-500 hover:underline">Loyal Points</a></p>
+            <a href="{% url 'loyalty:purchase-card' %}" class="text-2xl font-semibold mt-8">Loyal Points</a>
             <p>Total Points: {{ loyal_points.total_points }}</p>
             <p>Redeemed Points: {{ loyal_points.points_redeemed }}</p>
             <p>Points Remain: {{ loyal_points.points_remain }}</p>
             <!-- Add more details about loyal points as needed -->
+        {% else %}
+            
+            <p><a href="{% url 'loyalty:purchase-card' %}" class="text-blue-500 hover:underline">Purchase Loyalty Card</a></p>
         {% endif %}
         
         <!-- Form to Show Bookings -->

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate, login
@@ -155,28 +156,62 @@ def add_menu_combo(request):
 def book_combo(request, combo_id):
     combo = Combo.objects.get(pk=combo_id)
     traveler_name = request.user.username
-    loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
-    loyalty_card = LoyaltyCard.objects.filter(card_holder=request.user.username).first()
+    
+    loyal_points = None
+    try:
+        loyal_points = LoyalPoint.objects.get(traveler=request.user.username)
+    except:
+        pass
+
+    try:
+        loyalty_card = LoyaltyCard.objects.get(card_holder=request.user.username)
+        if loyalty_card.active:
+            multiple_factor = loyalty_card.card.multiple_factor
+        else:
+            multiple_factor = 3
+    except:
+        multiple_factor = 3
     
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
         redeem_points = request.POST.get('redeem_points')
-        discount = loyalty_card.card.multiple_factor * int(redeem_points)
+        discount = multiple_factor * int(redeem_points)
         amount = combo.price * int(quantity)
 
-        loyal_points.points_redeemed += int(redeem_points)
-        loyal_points.points_remain -= int(redeem_points)
-        loyal_points.save()
+        if amount < discount:
+            messages.error(request, f'Discount:{discount} cannot be greater than the total amount:{amount}')
 
-        combo_booking = ComboBooking.objects.create(
-            restaurant_name=combo.restaurant_name,
-            combo=combo,
-            traveler_name=traveler_name,
-            quantity=quantity,
-            amount=amount - discount
-        )
+        elif loyal_points is not None and loyal_points.points_remain < int(redeem_points):
+            messages.error(request, 'Points to redeem is greater than the available')
 
-        return redirect('traveler:generate-itinerary')  # Redirect to a success page after saving
+        elif loyal_points is None:
+            if int(redeem_points) > 0:
+                messages.error(request, 'No available points to redeem')
+            else:
+                combo_booking = ComboBooking.objects.create(
+                    restaurant_name=combo.restaurant_name,
+                    combo=combo,
+                    traveler_name=traveler_name,
+                    quantity=quantity,
+                    amount=amount - discount
+                )
+
+                return redirect('traveler:generate-itinerary')
+            
+        elif loyal_points is not None:
+            loyal_points.points_redeemed += int(redeem_points)
+            loyal_points.points_remain -= int(redeem_points)
+            loyal_points.save()
+
+            combo_booking = ComboBooking.objects.create(
+                restaurant_name=combo.restaurant_name,
+                combo=combo,
+                traveler_name=traveler_name,
+                quantity=quantity,
+                amount=amount - discount
+            )
+            
+            return redirect('traveler:generate-itinerary')
 
     context = {
         'combo_name': combo.name,
