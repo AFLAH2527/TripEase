@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Register</title>
+{% endblock title  %}
+
+{% block content %}
+<div class="w-full h-full overflow-y-auto bg-[url('/static/images/landing.jpg')] bg-cover px-8 py-4 md:px-36 md:py-16 flex flex-col items-start justify-center">
+    <h1 class="text-5xl md:text-7xl text-white font-bold drop-shadow-md pb-10">I'm a,</h1>
+    <div class="flex flex-col w-full items-center justify-center md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+        <a href="{% url 'traveler:traveler-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
+            <img src="{% static "images/tourist.svg" %}" class="w-64" alt="">
+            <span class="text-xl font-semibold">Traveler</span>
+        </a>
+        <a href="{% url 'hotel:hotel-user-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
+            <img src="{% static "images/hotel.svg" %}" class="w-64" alt="">
+            <span class="text-xl font-semibold">Hotel Owner</span>
+        </a>
+        <a href="{% url 'restaurant:restaurant-user-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
+            <img src="{% static "images/restaurant.svg" %}" class="w-64" alt="">
+            <span class="text-xl font-semibold">Restaurant Owner</span>
+        </a>
+        <a href="{% url 'taxi:taxi-user-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
+            <img src="{% static "images/taxi.svg" %}" class="w-64" alt="">
+            <span class="text-xl font-semibold">Taxi Driver</span>
+        </a>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+
+<form method="post" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:mx-auto w-full mt-10 md:mt-0">
+    {% csrf_token %}
+
+    <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Login to continue</h2>
+    
+    <div class="relative mb-4">
+    <label for="id_username" class="leading-7 text-sm text-gray-600">Username</label>
+    <input type="text" id="id_username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="">
+    </div>
+
+    <div class="relative mb-4">
+    <label for="id_password" class="leading-7 text-sm text-gray-600">Password</label>
+    <input type="password" id="id_password" name="password" required class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+    </div>
+
+    <p class="text-xs text-gray-500 mt-3">Don't have an account? <a href="">Register here</a></p>
+    <a href="{% url 'traveler:traveler-register' %}">Register as Traveler</a>
+    <a href="{% url 'hotel:hotel-user-register' %}">Register as Hotel</a>
+    <a href="{% url 'restaurant:restaurant-user-register' %}">Register as Restaurant</a>
+    <a href="{% url 'taxi:taxi-user-register' %}">Register as Taxi</a>
+</form>

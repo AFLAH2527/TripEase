@@ -153,7 +153,7 @@ def book_room(request, room_id):
         no_of_days = (datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(start_date, '%Y-%m-%d')).days + 1
 
         traveler_name = request.user.username
-        redeem_points = request.POST.get('redeem_points')
+        redeem_points = request.POST.get('redeem_points', 0)
         discount = multiple_factor * int(redeem_points)
         amount = room.price * int(no_of_days)
         
@@ -199,6 +199,7 @@ def book_room(request, room_id):
                 return redirect('traveler:generate-itinerary')
     
     context = {
+        'room': room,
         'hotel_name': room.hotel_name.name,
         'room_type': room.room_type,
         'traveler_name': traveler_name,

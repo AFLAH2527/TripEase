@@ -1,104 +1,238 @@
-{% extends "base.html" %}
-{% load tailwind_filters %}
-
+{% extends "base.html" %} {% load static %} {% load tailwind_filters %} 
 {% block title %}
-    <title>Traveler Dashboard</title>
-{% endblock title  %}
-
-{% block content %}
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">Traveler Dashboard</h1>
-
-        <!-- Display earned loyal points -->
-        {% if loyal_points %}
-            <a href="{% url 'loyalty:purchase-card' %}" class="text-2xl font-semibold mt-8">Loyal Points</a>
-            <p>Total Points: {{ loyal_points.total_points }}</p>
-            <p>Redeemed Points: {{ loyal_points.points_redeemed }}</p>
-            <p>Points Remain: {{ loyal_points.points_remain }}</p>
-            <!-- Add more details about loyal points as needed -->
-        {% else %}
-            
-            <p><a href="{% url 'loyalty:purchase-card' %}" class="text-blue-500 hover:underline">Purchase Loyalty Card</a></p>
-        {% endif %}
+<title>Traveler Dashboard</title>
+<script src="https://inorganik.github.io/countUp.js/dist/countUp.umd.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+{% endblock title %} {% block content %}
+<div class="w-full h-full overflow-x-hidden  flex flex-col px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16">
+  <video class="fixed object-cover right-0 bottom-0 left-0 top-0 min-w-full min-h-full -z-40" autoplay muted loop>
+    <source src="{% static "videos/background.mp4" %}" type="video/mp4" />
+  </video>
+  <div class="flex flex-col md:flex-row pb-8 gap-8">
+    <div class="w-full md:w-1/3 rounded-md p-4 bg-blue-800 text-white shadow-md flex items-center gap-4">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16">
+          <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+        </svg>
         
-        <!-- Form to Show Bookings -->
-        <form action="" method="post" class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            {% csrf_token %}
-            <div class="mb-4">
-                {{ travel_plan_form|crispy }}
-            </div>
-            <div class="flex items-center justify-between">
-                <input type="submit" value="Show" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            </div>
-        </form>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-gray-200">Welcome!</span>
+        <span class="text-4xl font-semibold">{{request.user.username|title}}</span>
+      </div>
+      <form action="{% url 'logout' %}" method="post" class="ml-auto">
+        {% csrf_token %}
+        <button type="submit">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+          </svg>
+        </button>
+    </form>
 
-        <!-- Display Bookings -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold mb-4">Your Bookings</h2>
+      
+    </div>
+    <div class="w-full md:w-2/3 flex flex-col md:flex-row p-5 rounded-md bg-blue-800 text-white shadow-md gap-4 justify-evenly">
+      <div class="flex flex-col">
+        <span class="text-gray-200">Total Points</span>
+        <span class="text-5xl font-semibold" id="total">
+          0
+        </span>
+      </div>
+      <div class="w-1 bg-slate-200"></div>
+      <div class="flex flex-col">
+        <span class="text-gray-200">Redeemed Points</span>
+        <span class="text-5xl font-semibold" id="redeemed">
+          0
+        </span>
+      </div>
+      <div class="w-1 bg-slate-200"></div>
+      <div class="flex flex-col">
+        <span class="text-gray-200">Remaining Points</span>
+        <span class="text-5xl font-semibold" id="remain">
+          {{ loyal_points.points_remain }}
+        </span>
+      </div>
+    </div>
+  </div>
+  {% if not loyal_points %}
+  <div id="alert-additional-content-1" class="p-4 mb-4  border rounded-md bg-white shadow-md" role="alert">
+    <div class="flex items-center">
+      <svg class="flex-shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>      
+      <span class="sr-only">Info</span>
+      <h3 class="text-lg font-medium">Loyality points empty</h3>
+    </div>
+    <div class="mt-2 mb-4 text-sm">
+      Purchase loyality cards to earn loyality points to redeem while booking.
+    </div>
+    <div class="flex">
+      <a href="{% url 'loyalty:purchase-card' %}" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center ">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="me-2 h-3 w-3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+        Purchase Loyality Card
+      </a>
+      <button type="button" class="text-blue-800 bg-transparent border border-blue-800 hover:bg-blue-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 text-center " data-dismiss-target="#alert-additional-content-1" aria-label="Close">
+        Dismiss
+      </button>
+    </div>
+  </div>
+  {%endif%}
 
-            <!-- Room Bookings - Upcoming -->
-            <div class="mb-8">
-                <h3 class="text-xl font-bold mb-2">Upcoming Room Bookings</h3>
-                <ul>
-                    {% for room_booking in room_bookings_upcoming %}
-                        <li>{{ room_booking }} - {{ room_booking.no_of_days }} - ${{ room_booking.amount }}</li>
-                    {% empty %}
-                        <li>No upcoming room bookings.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-
-            <!-- Room Bookings - Completed -->
-            <div class="mb-8">
-                <h3 class="text-xl font-bold mb-2">Completed Room Bookings</h3>
-                <ul>
-                    {% for room_booking in room_bookings_completed %}
-                        <li>{{ room_booking }} - {{ room_booking.no_of_days }} - ${{ room_booking.amount }}</li>
-                    {% empty %}
-                        <li>No completed room bookings.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-
-            <!-- Combo Bookings -->
-            <div class="mb-8">
-                <h3 class="text-xl font-bold mb-2">Combo Bookings</h3>
-                <!-- Upcoming Combo Bookings -->
-                <h4 class="text-lg font-bold mb-2">Upcoming</h4>
-                <ul>
-                    {% for upcoming_combo_booking in upcoming_combo_bookings %}
-                        <li>{{ upcoming_combo_booking }} - {{ upcoming_combo_booking.quantity }} - {{ upcoming_combo_booking.food_date }}</li>
-                    {% empty %}
-                        <li>No upcoming combo bookings.</li>
-                    {% endfor %}
-                </ul>
-
-                <!-- Completed Combo Bookings -->
-                <h4 class="text-lg font-bold mb-2">Completed</h4>
-                <ul>
-                    {% for completed_combo_booking in completed_combo_bookings %}
-                        <li>{{ completed_combo_booking }} - {{ completed_combo_booking.quantity }} - {{ completed_combo_booking.food_date }}</li>
-                    {% empty %}
-                        <li>No completed combo bookings.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-
-            <!-- Taxi Bookings -->
-            <div>
-                <h3 class="text-xl font-bold mb-2">Taxi Bookings</h3>
-                <ul>
-                    {% for taxi_booking in taxi_bookings %}
-                        <li>{{ taxi_booking }} - {{ taxi_booking.total_rent }}</li>
-                    {% empty %}
-                        <li>No taxi bookings yet.</li>
-                    {% endfor %}
-                </ul>
-            </div>
+  <form class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+    {% csrf_token %}
+    <div class="flex flex-col md:grid md:grid-cols-2 gap-8">
+        <div class="flex flex-col">
+            <label for="destination" class="block mb-2 text-sm font-medium text-gray-900 ">Destination *</label>
+            <select required name="destination" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+              
+              {% for value, label in travel_plan_form.fields.destination.choices %}
+                <option value="{{value}}">{{label}}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <div class="flex flex-col">
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Budget (Total)*</label>
+            <input required type="text" name="budget" placeholder="Enter budget" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+        </div>
+        <div class="flex flex-col">
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Start Date*</label>
+            <input required type="date" id="base-input" name="from_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+        </div>
+        <div class="flex flex-col">
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">End Date*</label>
+            <input required type="date" id="base-input" name="to_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
 
-        
-
-
     </div>
+    <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
+          <div class="flex flex-col">
+              <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Hotel Percentage*</label>
+              <input required type="number" placeholder="Enter hotel percentage" name="hotel_percentage" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+          </div>
+          <div class="flex flex-col">
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Restaurant Percentage*</label>
+            <input required type="number" placeholder="Enter restaurant percentage" name="restaurant_percentage" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+        </div>
+        <div class="flex flex-col">
+          <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Taxi Percentage*</label>
+          <input required type="number" placeholder="Enter taxi percentage" name="taxi_percentage" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      </div>
+        <div class="flex justify-center col-span-3">
+            <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                Show Booking Options
+                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
+                </button>
+        </div>
+    </div>
+  
+  </form>
+
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
+    <div class="flex justify-between items-center border-b-2 pb-2 mb-2">
+      <h3 class="text-xl font-semibold ">Room Bookings</h3>
+      <form>
+        <select onchange="this.form.submit()" name="room_booking_type" class="bg-gray-50  text-gray-900 text-xs rounded-lg   block p-2.5 ">
+          <option value="all" {% if room_booking_type == 'all' %}selected{% endif %}>All</option>
+          <option value="upcoming" {% if room_booking_type == 'upcoming' %}selected{% endif %}>Upcoming</option>
+          <option value="completed" {% if room_booking_type == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+      </form>
+    </div>
+    {% for room_booking in room_bookings %}
+        <div class="flex gap-2 items-center p-2">
+          <div class="bg-blue-800 text-white rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+            </svg>          
+          </div>
+          <div class="flex flex-col">
+            <span class="text-lg font-semibold">{{ room_booking.hotel_name }}</span>
+            <span class="text-gray-400 text-xs">{{ room_booking.start_date }} to  {{ room_booking.end_date }}</span>
+          </div>
+          <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
+      </div>
+      {%empty%}
+      <div class="flex flex-col gap-4 w-full justify-center items-center my-8">
+        <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
+        <span class="text-xs text-gray-300">No bookings found!</span>
+      </div>
+    {% endfor %}
+
+ </div>
+ <div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
+  <div class="flex justify-between items-center border-b-2 pb-2 mb-2">
+    <h3 class="text-xl font-semibold ">Combo Bookings</h3>
+    <form>
+      <select onchange="this.form.submit()"  name="combo_booking_type" class="bg-gray-50  text-gray-900 text-xs rounded-lg   block p-2.5 ">
+        <option value="all" {% if combo_booking_type == 'all' %}selected{% endif %}>All</option>
+        <option value="upcoming" {% if combo_booking_type == 'upcoming' %}selected{% endif %}>Upcoming</option>
+        <option value="completed" {% if combo_booking_type == 'completed' %}selected{% endif %}>Completed</option>
+      </select>
+    </form>
+  </div>
+  {% for combo_booking in combo_bookings %}
+  <div class="flex gap-2 items-center p-2">
+    <div class="bg-blue-800 text-white rounded-full p-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v16.5M2.25 12h19.5M6.375 17.25a4.875 4.875 0 0 0 4.875-4.875V12m6.375 5.25a4.875 4.875 0 0 1-4.875-4.875V12m-9 8.25h16.5a1.5 1.5 0 0 0 1.5-1.5V5.25a1.5 1.5 0 0 0-1.5-1.5H3.75a1.5 1.5 0 0 0-1.5 1.5v13.5a1.5 1.5 0 0 0 1.5 1.5Zm12.621-9.44c-1.409 1.41-4.242 1.061-4.242 1.061s-.349-2.833 1.06-4.242a2.25 2.25 0 0 1 3.182 3.182ZM10.773 7.63c1.409 1.409 1.06 4.242 1.06 4.242S9 12.22 7.592 10.811a2.25 2.25 0 1 1 3.182-3.182Z" />
+      </svg>
+               
+    </div>
+    <div class="flex flex-col">
+      <span class="text-lg font-semibold">{{ combo_booking.combo.name }}</span>
+      <span class="text-gray-400 text-xs">{{ combo_booking.combo.restaurant_name }}</span>
+    </div>
+    <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
+</div>
+{%empty%}
+<div class="flex flex-col gap-4 w-full justify-center items-center my-8">
+  <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
+  <span class="text-xs text-gray-300">No bookings found!</span>
+</div>
+{% endfor %}
+</div>
+<div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
+  <div class="flex justify-between items-center border-b-2 pb-4 mb-2">
+    <h3 class="text-xl font-semibold ">Taxi Bookings</h3>
+  </div>
+  {% for taxi_booking in taxi_bookings %}
+  <div class="flex gap-2 items-center p-2">
+    <div class="bg-blue-800 text-white rounded-full p-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+      </svg>
+      
+               
+    </div>
+    <div class="flex flex-col">
+      <span class="text-lg font-semibold">{{ taxi_booking.taxi.name }}</span>
+      <span class="text-gray-400 text-xs">{{ taxi_booking.pickup_location }} to {{ taxi_booking.destination }}</span>
+    </div>
+    <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
+</div>
+{%empty%}
+<div class="flex flex-col gap-4 w-full justify-center items-center my-8">
+  <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
+  <span class="text-xs text-gray-300">No bookings found!</span>
+</div>
+{% endfor %}
+</div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<script>
+  const c1 = new countUp.CountUp("total",   {{ loyal_points.total_points }})
+  const c2 = new countUp.CountUp("redeemed",   {{ loyal_points.points_redeemed }})
+  const c3 = new countUp.CountUp("remain",   {{ loyal_points.points_remain }})
+  
+  c1.start();
+  c2.start();
+  c3.start();
+
+</script>
 {% endblock content %}

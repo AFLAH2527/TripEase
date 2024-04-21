@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib.auth import urls
 from django.contrib import admin
 from django.urls import path, include
-
+from django.views.generic import TemplateView
 from .views import landing_page, redirect_login
 
 urlpatterns = [
     path('', landing_page, name='landing-page'),
+    path('register/type', TemplateView.as_view(template_name='registration/select_account_type.html'), name='register-type'),
     path('admin/', admin.site.urls),
     path('hotel/', include('hotel.urls', namespace='hotel')),
     path('restaurant/', include('restaurant.urls', namespace='restaurant')),

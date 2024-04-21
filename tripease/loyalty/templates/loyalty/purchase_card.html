@@ -1,40 +1,58 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block title %}
     <title>Purchase Loyalty Card</title>
 {% endblock %}
 
 {% block content %}
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold mb-4">Purchase Loyalty Card</h1>
-
-        {% if active %}
-
-            <h2 class="text-xl font-semibold mb-2">{{ active }}</h2>
-            ACTIVE CARD: {{ loyalty_card.card }}
-            DAYS REMAIN: {{ loyalty_card.days_remain }}
-
-        {% else %}
-
-            <form action="{% url 'loyalty:purchase-card' %}" method="post" class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-
-                <!-- Show available cards -->
-                <h2 class="text-xl font-semibold mb-2">Available Cards</h2>
-                <ul>
-                    {% for card_type in available_card_types %}
-                        <li>{{ card_type.name }} - Points: {{ card_type.points }} - Price: {{ card_type.price }} per month</li>
-                    {% endfor %}
-                </ul>
-
-                {% csrf_token %}
-                {{ form|crispy }}
-
-                <!-- Add button to purchase card -->
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">Purchase Card</button>
-            </form>
-
-        {% endif %}
-
+<div class="w-full h-full overflow-x-hidden overflow-y-scroll bg-[url('/static/images/bg.jpg')] bg-cover px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16 flex flex-col  gap-8">
+    <div class="bg-slate-100 rounded-md flex flex-col p-8 shadow-md gap-8">
+        {% csrf_token %}
+        <div class="flex justify-center col-span-3 border-b-2 pb-2 mb-4 items-center">
+            <a href="{% url "traveler:traveler" %}" class="mr-auto hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                  </svg>
+            </a>
+            <span class="text-3xl font-semibold text-center mr-auto">Purchase Loyality Card</span>
+        </div>
+        <h2 class="text-xl font-semibold">Available Cards</h2>
+        <div class="flex flex-col md:grid md:grid-cols-3 gap-4">
+            {% for card_type in available_card_types %}
+            <div class="border rounded p-4 bg-white flex flex-col gap-2">
+                <span class="text-lg font-semibold border-b mb-2">{{ card_type.name }}</span>
+                <span class="text-md font-semibold">Points: <span class="text-gray-400 font-normal">{{ card_type.points }}</span></span>
+                <span class="text-md font-semibold">Price: <span class="text-gray-400 font-normal">₹ {{ card_type.price }} / Month</span></span>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <form action="" method="post" class="flex flex-col gap-4">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                <label for="destination" class="block text-gray-700 text-sm font-bold mb-2">Card *</label>
+                <select required name="card" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                  
+                  {% for value, label in form.fields.card.choices %}
+                    <option value="{{value}}">{{label}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="end_date">
+                    Duration (in days)*
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="end_date" type="text" placeholder="Duration" name="duration">
+            </div>
+            <button class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" type="submit">
+                Confirm Booking
+            </button>
+        </form>
     </div>
+
+    
+</div>
 {% endblock %}
+

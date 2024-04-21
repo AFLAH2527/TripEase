@@ -1,10 +1,75 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>Book Combo</title>
+    <title>Book Combo: {{ combo.name }}</title>
 {% endblock title %}
 
 {% block content %}
+<div class="w-full h-full overflow-x-hidden overflow-y-scroll bg-[url('/static/images/bg.jpg')] bg-cover px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16 flex flex-col gap-8">
+    <form method="post" class="bg-slate-100 rounded-md flex flex-col md:grid md:grid-cols-3 p-8 shadow-md gap-8">
+        {% csrf_token %}
+        <div class="flex justify-center col-span-3 border-b-2 pb-2 mb-4 items-center">
+            <a href="{% url "traveler:generate-itinerary" %}" class="mr-auto hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                  </svg>
+                  
+            </a>
+            <span class="text-3xl font-semibold text-center mr-auto">Book Combo: {{ combo.name }}</span>
+        </div>
+        <div class="flex flex-col ">
+            <span class="text-sm text-gray-400 font-medium">Restaurant Name</span>
+            <span class="text-lg font-semibold">{{ combo.restaurant_name.name }}</span>
+        </div>
+        <div class="flex flex-col ">
+            <span class="text-sm text-gray-400 font-medium">Price per combo</span>
+            <span class="text-lg font-semibold">₹ {{ combo.price }}</span>
+        </div>
+        <div class="flex flex-col ">
+            <span class="text-sm text-gray-400 font-medium">Items</span>
+            <span class="text-lg font-semibold">{% for item in combo.items.objects %}{{item}} {% endfor %}</span>
+        </div>
+        <div class="flex flex-col ">
+            <span class="text-sm text-gray-400 font-medium">Restaurant Location</span>
+            <span class="text-lg font-semibold">{{combo.restaurant_name.place}}</span>
+        </div>
+        <div class="flex flex-col ">
+            <span class="text-sm text-gray-400 font-medium">Restaurant Phone</span>
+            <span class="text-lg font-semibold">+91{{combo.restaurant_name.phone}}</span>
+        </div>
+        <span class="mt-10 col-span-3 border-b-2 pb-2 text-2xl font-semibold">Booking Details</span>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="food_date">
+                Food Date *
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="food_date" type="date" placeholder="Food Date" name="food_date">
+        </div>
+        <!-- Quantity -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="quantity">
+                Quantity *
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantity" type="number" placeholder="Quantity" name="quantity">
+        </div>
+        <div class="mb-4">
+            {% if loyal_points %}
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="redeem_points">
+                    Points to redeem (Available Points: {{ loyal_points.points_remain }})
+                </label>
+                <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="redeem_points" type="number" placeholder="Redeem Points" name="redeem_points">
+            {% endif %}
+        </div>
+        <div class="flex justify-center col-span-3">
+            <button class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Confirm Booking
+            </button>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock content %} 
 
 <div class="container mx-auto p-4">
     <!-- Display earned loyal points -->
@@ -88,5 +153,3 @@
         </div>
     </form>
 </div>
-
-{% endblock content %} 

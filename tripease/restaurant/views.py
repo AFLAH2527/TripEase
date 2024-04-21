@@ -217,6 +217,7 @@ def book_combo(request, combo_id):
             return redirect('traveler:generate-itinerary')
 
     context = {
+        'combo': combo,
         'combo_name': combo.name,
         'restaurant_name': combo.restaurant_name,
         'traveler_name': traveler_name,

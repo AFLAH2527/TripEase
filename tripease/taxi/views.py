@@ -169,6 +169,7 @@ def book_taxi(request, taxi_id):
             return redirect('traveler:generate-itinerary')
 
     context = {
+        'taxi': taxi,
         'taxi_name': taxi.name,
         'traveler_name': traveler_name,
         'daily_rent': taxi.daily_rent,

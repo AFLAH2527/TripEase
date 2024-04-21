@@ -126,31 +126,32 @@ def traveler(request):
             
     else:
         traveler_name = request.user.username
-        room_bookings = RoomBooking.objects.filter(traveler_name=traveler_name)
-        combo_bookings = ComboBooking.objects.filter(traveler_name=traveler_name)
+        current_date = timezone.now().date()
+
+        room_booking_type = request.GET.get('room_booking_type', 'all')
+        combo_booking_type = request.GET.get('combo_booking_type', 'all')
+
+        all_room_bookings = RoomBooking.objects.filter(traveler_name=traveler_name)
+        room_bookings = all_room_bookings   if room_booking_type == 'all' else all_room_bookings.filter(start_date__gt=current_date) if room_booking_type == 'upcoming' else all_room_bookings.filter(end_date__lte=current_date)
+
+        all_combo_bookings = ComboBooking.objects.filter(traveler_name=traveler_name)
+        combo_bookings = all_combo_bookings   if combo_booking_type == 'all' else all_combo_bookings.filter(food_date__gte=current_date) if combo_booking_type == 'upcoming' else all_combo_bookings.filter(food_date__lt=current_date)
+        
         taxi_bookings = TaxiBooking.objects.filter(traveler_name=traveler_name)
 
-        # Filter room bookings based on start and end dates
-        current_date = timezone.now().date()
-        room_bookings_upcoming = room_bookings.filter(start_date__gt=current_date)
-        room_bookings_completed = room_bookings.filter(end_date__lte=current_date)
 
-        # Separate upcoming and completed Combo Bookings
-        upcoming_combo_bookings = combo_bookings.filter(food_date__gte=timezone.now().date())
-        completed_combo_bookings = combo_bookings.filter(food_date__lt=timezone.now().date())
         
     loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
+    
 
     context = {
             'travel_plan_form': TravelPlanForm(),
             'room_bookings': room_bookings,
-            'room_bookings_upcoming': room_bookings_upcoming,
-            'room_bookings_completed': room_bookings_completed,
             'combo_bookings': combo_bookings,
-            'upcoming_combo_bookings': upcoming_combo_bookings,
-            'completed_combo_bookings': completed_combo_bookings,
             'taxi_bookings': taxi_bookings,
-            'loyal_points': loyal_points
+            'loyal_points': loyal_points,
+            'room_booking_type': room_booking_type,
+            'combo_booking_type': combo_booking_type,
     }
     return render(request, 'traveler/traveler.html', context)
 
