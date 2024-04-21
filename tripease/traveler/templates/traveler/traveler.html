@@ -80,7 +80,7 @@
   </div>
   {%endif%}
 
-  <form class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+  <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
     {% csrf_token %}
     <div class="flex flex-col md:grid md:grid-cols-2 gap-8">
         <div class="flex flex-col">
@@ -109,23 +109,25 @@
     <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
           <div class="flex flex-col">
               <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Hotel Percentage*</label>
-              <input required type="number" placeholder="Enter hotel percentage" name="hotel_percentage" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+              <input required type="number" placeholder="Enter hotel percentage" name="hotel_percentage" id="hotel_percentage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
           </div>
           <div class="flex flex-col">
             <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Restaurant Percentage*</label>
-            <input required type="number" placeholder="Enter restaurant percentage" name="restaurant_percentage" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+            <input required type="number" placeholder="Enter restaurant percentage" name="restaurant_percentage" id="restaurant_percentage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
         <div class="flex flex-col">
           <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Taxi Percentage*</label>
-          <input required type="number" placeholder="Enter taxi percentage" name="taxi_percentage" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+          <input required type="number" placeholder="Enter taxi percentage" name="taxi_percentage" id="taxi_percentage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </div>
-        <div class="flex justify-center col-span-3">
+        <div class="flex flex-col gap-2 justify-center items-center col-span-3">
             <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
                 Show Booking Options
                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                 </svg>
                 </button>
+            <span id="error_message" class="hidden text-red-400 text-sm bg-red-100 px-4 py-2 border rounded border-red-400">Percentages must add up to 100.</span>
+              
         </div>
     </div>
   
@@ -234,5 +236,55 @@
   c2.start();
   c3.start();
 
+</script>
+<script>
+  const searchForm = document.forms['search_form'];
+  const hotelInput = document.getElementById('hotel_percentage');
+  const restaurantInput = document.getElementById('restaurant_percentage');
+  const taxiInput = document.getElementById('taxi_percentage');
+  const errorDiv = document.getElementById('error_message');
+
+  function updateThirdField() {
+      const hotelPercentage = parseInt(hotelInput.value) || 0;
+      const restaurantPercentage = parseInt(restaurantInput.value) || 0;
+      const taxiPercentage = parseInt(taxiInput.value) || 0;
+
+      const totalPercentage = hotelPercentage + restaurantPercentage + taxiPercentage;
+
+
+      if (!hotelPercentage && restaurantPercentage && taxiPercentage) {
+          hotelInput.value = 100 - (restaurantPercentage + taxiPercentage);
+      } else if (hotelPercentage && !restaurantPercentage && taxiPercentage) {
+          restaurantInput.value = 100 - (hotelPercentage + taxiPercentage);
+      } else if (hotelPercentage && restaurantPercentage && !taxiPercentage) {
+          taxiInput.value = 100 - (hotelPercentage + restaurantPercentage);
+      }
+  }
+
+  function preventFormSubmit(event) {
+    event.preventDefault();
+
+    const hotelPercentage = parseInt(hotelInput.value) || 0;
+    const restaurantPercentage = parseInt(restaurantInput.value) || 0;
+    const taxiPercentage = parseInt(taxiInput.value) || 0;
+
+    const totalPercentage = hotelPercentage + restaurantPercentage + taxiPercentage;
+
+    if (totalPercentage !== 100) {
+        errorDiv.classList.remove('hidden');
+        return;
+    } 
+    else {
+      errorDiv.classList.add('hidden');
+    }
+
+
+    searchForm.submit();
+}
+
+  hotelInput.addEventListener('change', updateThirdField);
+  restaurantInput.addEventListener('change', updateThirdField);
+  taxiInput.addEventListener('change', updateThirdField);
+  searchForm.addEventListener('submit', preventFormSubmit)
 </script>
 {% endblock content %}
