@@ -1,79 +1,148 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
-    {% if hotel %}
 
-        <form action="" method="post" class="max-w-md mx-auto">
+    <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            
+            <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            {% if hotel %}<span class="ml-3 text-xl">{{ hotel.name }}</span>{% else %}<span class="ml-3 text-xl">{{ room.hotel_name.name }}</span>{% endif %}
+            </a>
+            <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+            {% if hotel %}<a href="#" class="mr-5 hover:text-gray-900">Add Room</a>{% else %}<a href="#" class="mr-5 hover:text-gray-900">Update Room</a>{% endif %}
+            </nav>
+
+            <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <div class="mb-4">
-                <p class="font-bold">Hotel Name: {{ hotel.name }}</p>
-                <input type="hidden" name="hotel_name" value="{{ hotel.id }}" readonly>
-            </div>
-            <div class="mb-4">
-                <label for="id_room_type" class="block text-gray-700 font-bold mb-2">Room type:</label>
-                <input type="text" name="room_type" id="id_room_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
-            <div class="mb-4">
-                <label for="id_price" class="block text-gray-700 font-bold mb-2">Price:</label>
-                <input type="number" name="price" id="id_price" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
-            <div class="mb-4">
-                <input type="checkbox" name="bathroom_attached" id="id_bathroom_attached" class="mr-2">
-                <label for="id_bathroom_attached">Bathroom Attached</label>
-            </div>
-            <div class="mb-4">
-                <input type="checkbox" name="ac" id="id_ac" class="mr-2">
-                <label for="id_ac">AC</label>
-            </div>
-            <div class="mb-4">
-                <label for="id_count" class="block text-gray-700 font-bold mb-2">Count:</label>
-                <input type="number" name="count" id="id_count" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            <div class="mb-4">
-                <input type="submit" value="Add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            </div>
-        </form>
-    
-    {% else %}
+                <button type="submit" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                    Logout
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </form>
 
-        <form action="" method="post" class="max-w-md mx-auto">
+        </div>
+    </header>
+    
+
+
+    <div class="w-full h-full overflow-x-hidden overflow-y-scroll bg-[url('/static/images/bg.jpg')] bg-cover flex flex-col  px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16 gap-8">
+        
+        {% if hotel %}  
+
+        <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
             {% csrf_token %}
-            <div class="mb-4">
-                <p class="font-bold">Hotel Name: {{ room.hotel_name.name }}</p>
-                <input type="hidden" name="hotel_name" value="{{ room.hotel_name.id }}" readonly>
-            </div>
-            <div class="mb-4">
-                <label for="id_room_type" class="block text-gray-700 font-bold mb-2">Room type:</label>
-                <input type="text" name="room_type" id="id_room_type" value="{{ room.room_type }}"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
-            <div class="mb-4">
-                <label for="id_price" class="block text-gray-700 font-bold mb-2">Price:</label>
-                <input type="number" name="price" id="id_price" value="{{ room.price }}"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
-            <div class="mb-4">
-                <input type="checkbox" name="bathroom_attached" id="id_bathroom_attached" {% if room.bathroom_attached %}checked{% endif %}
-                class="mr-2">
-                <label for="id_bathroom_attached">Bathroom Attached</label>
-            </div>
-            <div class="mb-4">
-                <input type="checkbox" name="ac" id="id_ac" {% if room.ac %}checked{% endif %}
-                class="mr-2">
-                <label for="id_ac">AC</label>
-            </div>
-            <div class="mb-4">
-                <label for="id_count" class="block text-gray-700 font-bold mb-2">Count:</label>
-                <input type="number" name="count" id="id_count" value="{{ room.count }}"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            <div class="mb-4">
-                <input type="submit" value="Add" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            </div>
-        </form>
-    
-    {% endif %}
+            <span class="text-xl col-span-3 font-semibold pb-8">{{ hotel.name }} | Add Room</span>
+            <input type="hidden" name="hotel_name" value="{{ hotel.id }}" readonly>
 
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8">
+                <div class="flex flex-col">
+                    <label for="id_room_type" class="block mb-2 text-sm font-medium text-gray-900 ">Room type: *</label>
+                    <input required type="text" name="room_type" placeholder="Enter the type of room" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                </div>
+                <div class="flex flex-col">
+                    <label for="id_price" class="block mb-2 text-sm font-medium text-gray-900 ">Price *</label>
+                    <input required type="text" name="price" placeholder="Enter the price of room" id="id_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                </div>
+                <div class="flex flex-col">
+                    <label for="id_count" class="block mb-2 text-sm font-medium text-gray-900 ">No. of rooms *</label>
+                    <input required type="number" placeholder="Enter count" name="count" id="id_count" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                </div>
+        
+            </div>
+
+
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <input type="checkbox" name="bathroom_attached" id="id_bathroom_attached" class="mr-2">
+                        <label for="id_bathroom_attached">Bathroom Attached</label>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <input type="checkbox" name="ac" id="id_ac" class="mr-2">
+                        <label for="id_ac">AC</label>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-2 justify-center items-center col-span-3">
+                    <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                        Add room
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                        </svg>
+                        </button>
+                    <span id="error_message" class="hidden text-red-400 text-sm bg-red-100 px-4 py-2 border rounded border-red-400">Percentages must add up to 100.</span>
+                      
+                </div>
+            </div>
+          
+        </form>
+
+        {% else %}
+
+        <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+            {% csrf_token %}
+            <span class="text-xl col-span-3 font-semibold pb-8">{{ room.hotel_name.name }} | Add Room</span>
+            <input type="hidden" name="hotel_name" value="{{ room.hotel_name.id }}" readonly>
+
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8">
+                <div class="flex flex-col">
+                    <label for="id_room_type" class="block mb-2 text-sm font-medium text-gray-900 ">Room type: *</label>
+                    <input required type="text" name="room_type" placeholder="Enter the type of room" id="base-input" value="{{ room.room_type }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                </div>
+                <div class="flex flex-col">
+                    <label for="id_price" class="block mb-2 text-sm font-medium text-gray-900 ">Price *</label>
+                    <input required type="text" name="price" placeholder="Enter the price of room" id="id_price" value="{{ room.price }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                </div>
+                <div class="flex flex-col">
+                    <label for="id_count" class="block mb-2 text-sm font-medium text-gray-900 ">No. of rooms *</label>
+                    <input required type="number" placeholder="Enter count" name="count" id="id_count" value="{{ room.count }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                </div>
+        
+            </div>
+
+
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <input type="checkbox" name="bathroom_attached" id="id_bathroom_attached" {% if room.bathroom_attached %}checked{% endif %} class="mr-2">
+                        <label for="id_bathroom_attached">Bathroom Attached</label>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <input type="checkbox" name="ac" id="id_ac" {% if room.ac %}checked{% endif %} class="mr-2">
+                        <label for="id_ac">AC</label>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-2 justify-center items-center col-span-3">
+                    <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                        Update room
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                        </svg>
+                        </button>
+                    <span id="error_message" class="hidden text-red-400 text-sm bg-red-100 px-4 py-2 border rounded border-red-400">Percentages must add up to 100.</span>
+                      
+                </div>
+            </div>
+          
+        </form>
+
+        {% endif %}
+    
+    </div>
+    
+    
 
 {% endblock content %}

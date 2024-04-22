@@ -4,22 +4,33 @@
     <title>TripEase - {{name}} Reg</title>
 {% endblock title  %}
 
+
 {% block content %}
-  
-    <form action="" method="post" class="max-w-md mx-auto">
+<div class="w-full h-full bg-[url('/static/images/landing.jpg')] bg-cover px-4 md:px-36 md:py-16 flex flex-col justify-center items-center">
+    <form method="post" class="flex flex-col w-full md:w-min bg-white p-8 rounded-md shadow-md">
         {% csrf_token %}
-        <div class="mb-4">
+        <h1 class="text-xl font-semibold border-b-2 mb-2 pb-2">Register to continue</h1>
+
+        <div class="">
             <label for="id_username" class="block text-gray-700 font-bold">Username:</label>
-            <input type="text" name="username" id="id_username" maxlength="150" autofocus="" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" aria-describedby="id_username_helptext">
+            <div class="flex">
+                <input required type="text" name="username" id="id_username" class="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 md:w-96 max-w-full text-sm border-gray-300 p-2.5">
+            </div>
             <div id="id_username_helptext" class="text-sm text-gray-600">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</div>
         </div>
-        <div class="mb-4">
+
+        <div class="">
             <label for="id_email" class="block text-gray-700 font-bold">Email:</label>
-            <input type="email" name="email" id="id_email" maxlength="320" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <div class="flex">
+                <input required type="email" name="email" id="id_email" class="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 md:w-96 max-w-full text-sm border-gray-300 p-2.5">
+            </div>
         </div>
-        <div class="mb-4">
+
+        <div class="">
             <label for="id_password1" class="block text-gray-700 font-bold">Password:</label>
-            <input type="password" name="password1" id="id_password1" autocomplete="new-password" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" aria-describedby="id_password1_helptext">
+            <div class="flex">
+                <input required type="password" name="password1" id="id_password1" class="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 md:w-96 max-w-full text-sm border-gray-300 p-2.5">
+            </div>
             <div id="id_password1_helptext" class="text-sm text-gray-600">
                 <ul>
                     <li>Your password can’t be too similar to your other personal information.</li>
@@ -29,38 +40,47 @@
                 </ul>
             </div>
         </div>
-        <div class="mb-4">
+
+        <div class="">
             <label for="id_password2" class="block text-gray-700 font-bold">Password confirmation:</label>
-            <input type="password" name="password2" id="id_password2" autocomplete="new-password" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" aria-describedby="id_password2_helptext">
+            <div class="flex">
+                <input required type="password" name="password2" id="id_password2" class="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 md:w-96 max-w-full text-sm border-gray-300 p-2.5">
+            </div>
             <div id="id_password2_helptext" class="text-sm text-gray-600">Enter the same password as before, for verification.</div>
         </div>
 
-        {% if name %}
-            <div class="mb-4">
+        {% if name == "Traveler" %}
+            <div class="">
                 <label for="id_name" class="block text-gray-700 font-bold">Name:</label>
                 <input type="text" name="name" id="id_name" maxlength="100" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <div class="mb-4">
+            <div class="">
                 <label for="id_phone" class="block text-gray-700 font-bold">Phone:</label>
                 <input type="tel" name="phone" id="id_phone" maxlength="15" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <div class="mb-4">
+            <div class="">
                 <label for="id_native_place" class="block text-gray-700 font-bold">Native Place:</label>
                 <input type="text" name="native_place" id="id_native_place" maxlength="100" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <div class="mb-4">
+            <div class="">
                 <label for="id_district" class="block text-gray-700 font-bold">District:</label>
                 <input type="text" name="district" id="id_district" maxlength="50" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
-            <div class="mb-4">
+            <div class="">
                 <label for="id_state" class="block text-gray-700 font-bold">State:</label>
                 <input type="text" name="state" id="id_state" maxlength="50" required="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
             
         {% endif %}
-
-        <input type="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        
+        
+        <button type="submit" class="text-white bg-blue-800 border-0 py-2 px-8 focus:outline-none hover:bg-blue-900 rounded-md text-lg mt-4 font-medium">Login</button>
+        
     </form>
+</div>
+
+
+  
 
 {% endblock content %}
 

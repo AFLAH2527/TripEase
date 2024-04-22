@@ -6,28 +6,83 @@
 
 {% block content %}
 
-    <form action="" method="post">
+<header class="text-gray-600 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+        <span class="ml-3 text-xl">{{ restaurant.name }}</span>
+        </a>
+        <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+        <a href="#" class="mr-5 hover:text-gray-900">Add Menu Combo</a>
+        </nav>
+
+        <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
-        Restaurant name: {{ restaurant.name }}
-        <label for="id_restaurant_name">Restaurant ID:</label>
-        <input type="text" name="restaurant_name" maxlength="50" required="" id="id_restaurant_name" readonly {% if restaurant %}value="{{restaurant.id}}"{% else %}{% endif %}">
+            <button type="submit" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                Logout
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </form>
 
-        <label for="id_name">Name:</label>
-        <input type="text" name="name" maxlength="50" required="" id="id_name">
+    </div>
+</header>
 
-        <label for="id_price">Price:</label>
-        <input type="number" name="price" maxlength="10" required="" id="id_price">
 
-        <select name="items" required="" id="id_items" multiple="" fdprocessedid="za106b">
 
-            {% for item in items %}
-            <option value="{{item.id}}">{{ item }}</option>
-            {% endfor %}
-          
-        </select>
+<div class="w-full h-full overflow-x-hidden overflow-y-scroll bg-[url('/static/images/bg.jpg')] bg-cover flex flex-col  px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16 gap-8">
+     
 
-        <input type="submit" value="Add">
+    <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+        {% csrf_token %}
+        <span class="text-xl col-span-3 font-semibold pb-8">{{ restaurant.name }} | Add Menu Combo</span>
+        <input type="hidden" name="restaurant_name" value="{{restaurant.id}}" readonly>
+
+        <div class="flex flex-col md:grid md:grid-cols-3 gap-8">
+            <div class="flex flex-col">
+                <label for="id_name" class="block mb-2 text-sm font-medium text-gray-900 ">Name: *</label>
+                <input required type="text" name="name" placeholder="Enter the food item" id="id_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+            </div>
+            <div class="flex flex-col">
+                <label for="id_price" class="block mb-2 text-sm font-medium text-gray-900 ">Price *</label>
+                <input required type="text" name="price" placeholder="Enter the price of food item" id="id_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+            </div>
+            <div class="flex flex-col">
+                <label for="id_items" class="block mb-2 text-sm font-medium text-gray-900 ">Items *</label>
+                <select multiple="" required name="items" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                
+                    {% for item in items %}
+                    <option value="{{item.id}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+        </div>
+
+
+        <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
+            
+            <div class="flex flex-col gap-2 justify-center items-center col-span-3">
+                <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                    Add Combo
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                    </button>
+                <span id="error_message" class="hidden text-red-400 text-sm bg-red-100 px-4 py-2 border rounded border-red-400">Percentages must add up to 100.</span>
+                  
+            </div>
+        </div>
+      
     </form>
+
+    
+
+</div>
+
 
 {% endblock content %}  
 

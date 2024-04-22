@@ -8,6 +8,7 @@
 {% block content %}
   
 <div class="w-full h-full overflow-x-hidden overflow-y-scroll bg-[url('/static/images/bg.jpg')] bg-cover flex flex-col  px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16 gap-8">
+    
     <div class="bg-slate-100 rounded-md flex flex-col p-8 shadow-md gap-2">
         <div class="flex justify-center  border-b-2 pb-2 mb-4 items-center">
             <a href="{% url "traveler:traveler" %}" class="mr-auto hover:scale-110">
@@ -34,14 +35,15 @@
             </div>
         </div>
     </div>
+
     <div class="flex flex-col lg:grid lg:grid-cols-3 rounded-md bg-slate-100 shadow-md p-8 gap-8">
         <span class="text-xl col-span-3 font-semibold">Rooms</span>
         {% for room in rooms %}
         <div class="rounded bg-white border-2 p-4 flex flex-col gap-2">              
             <span class="font-semibold">{{room.hotel_name.name}}</span>
             <div class="flex gap-4"><span>Type:</span> <span class="text-gray-400">{{room.room_type}}</span></div>
-            <div class="flex gap-4"><span>Capacity:</span> <span class="text-gray-400">{{room.count}}</span></div>
-            <div class="flex gap-4"><span>Bathroom Type:</span> <span class="text-gray-400">{% if room.athroom_attached  %}Attached{% else %}Shared{% endif %}</span></div>
+            <div class="flex gap-4"><span>Rooms:</span> <span class="text-gray-400">{{room.count}}</span></div>
+            <div class="flex gap-4"><span>Bathroom Type:</span> <span class="text-gray-400">{% if room.bathroom_attached  %}Attached{% else %}Shared{% endif %}</span></div>
             <div class="flex gap-4"><span>Rate:</span> <span class="text-gray-400">₹{{room.price}} / night</span></div>
             <div class="flex gap-4"><span>Location:</span> <span class="text-gray-400">{{room.hotel_name.place}}</span></div>
             <div class="flex gap-4"><span>Phone:</span> <span class="text-gray-400">+91{{room.hotel_name.phone}}</span></div>
@@ -58,6 +60,7 @@
         </div>
         {% endfor %}
     </div>
+
     <div class="flex flex-col lg:grid lg:grid-cols-3 rounded-md bg-slate-100 shadow-md p-8 gap-8">
         <span class="text-xl col-span-3 font-semibold">Combos</span>
         {% for combo in combos %}

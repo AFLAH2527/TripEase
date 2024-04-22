@@ -39,20 +39,18 @@ def restaurant_user_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'restaurant'])
 def restaurant(request):
-    try:
-        restaurant = Restaurant.objects.get(poc_name=request.user.username)
-        combos = Combo.objects.filter(restaurant_name=restaurant.id)
-        context = {
-            'restaurant':restaurant,
-            'combos': combos
-        }
-        return render(request, 'restaurant/restaurant.html', context)
-    except:
-        #Admin Login
-        context = {
-            'restaurant':"Admin",
-        }
-        return render(request, 'restaurant/restaurant.html', context)
+    restaurant = Restaurant.objects.get(poc_name=request.user.username)
+    print(restaurant.name)
+    combos = Combo.objects.filter(restaurant_name=restaurant)
+    combo_bookings = ComboBooking.objects.filter(combo__in=combos)
+    print(combos)
+    context = {
+        'restaurant': restaurant,
+        'combos': combos,
+        'combo_bookings': combo_bookings
+    }
+    return render(request, 'restaurant/restaurant.html', context)
+    
     
 
 

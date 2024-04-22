@@ -10,19 +10,19 @@
     <h1 class="text-5xl md:text-7xl text-white font-bold drop-shadow-md pb-10">I'm a,</h1>
     <div class="flex flex-col w-full items-center justify-center md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
         <a href="{% url 'traveler:traveler-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
-            <img src="{% static "images/tourist.svg" %}" class="w-64" alt="">
+            <img src="{% static 'images/tourist.svg' %}" class="w-64" alt="">
             <span class="text-xl font-semibold">Traveler</span>
         </a>
         <a href="{% url 'hotel:hotel-user-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
-            <img src="{% static "images/hotel.svg" %}" class="w-64" alt="">
+            <img src="{% static 'images/hotel.svg' %}" class="w-64" alt="">
             <span class="text-xl font-semibold">Hotel Owner</span>
         </a>
         <a href="{% url 'restaurant:restaurant-user-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
-            <img src="{% static "images/restaurant.svg" %}" class="w-64" alt="">
+            <img src="{% static 'images/restaurant.svg' %}" class="w-64" alt="">
             <span class="text-xl font-semibold">Restaurant Owner</span>
         </a>
         <a href="{% url 'taxi:taxi-user-register' %}" class="flex flex-col items-center justify-center gap-2 rounded-md shadow-md p-8 bg-white opacity-60 hover:opacity-100 hover:scale-105 cursor-pointer ">
-            <img src="{% static "images/taxi.svg" %}" class="w-64" alt="">
+            <img src="{% static 'images/taxi.svg' %}" class="w-64" alt="">
             <span class="text-xl font-semibold">Taxi Driver</span>
         </a>
     </div>

@@ -32,7 +32,7 @@
         </div>
         <button type="submit" class="text-white bg-blue-800 border-0 py-2 px-8 focus:outline-none hover:bg-blue-900 rounded-md text-lg mt-4 font-medium">Login</button>
         <div class="flex justify-center items-center text-xs gap-2">
-            <span>Don't have an account? </span> <a href="{% url "register-type" %}" class="underline text-xs">Register</a>
+            <span>Don't have an account? </span> <a href="{% url 'register-type' %}" class="underline text-xs">Register</a>
         </div>
     </form>
 </div>
@@ -41,7 +41,7 @@
 
 
 
-<form method="post" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:mx-auto w-full mt-10 md:mt-0">
+<!-- <form method="post" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:mx-auto w-full mt-10 md:mt-0">
     {% csrf_token %}
 
     <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Login to continue</h2>
@@ -61,4 +61,4 @@
     <a href="{% url 'hotel:hotel-user-register' %}">Register as Hotel</a>
     <a href="{% url 'restaurant:restaurant-user-register' %}">Register as Restaurant</a>
     <a href="{% url 'taxi:taxi-user-register' %}">Register as Taxi</a>
-</form>
+</form> -->

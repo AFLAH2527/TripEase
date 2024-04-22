@@ -73,6 +73,15 @@
             </label>
             <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="end_date" type="date" name="end_date">
         </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="id_redeem_points">
+                Redeem Points(Remain:{% if loyal_points %} {{ loyal_points.points_remain }} {% endif %}) *
+            </label>
+            <input required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id_redeem_points" type="number" name="redeem_points">
+        </div>
+
+
         <div class="flex justify-center col-span-3">
             <button class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                 Confirm Booking

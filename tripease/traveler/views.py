@@ -107,7 +107,7 @@ def traveler(request):
         loyalty_card.current_date = timezone.now().date()
         loyalty_card.save()
     except:
-        pass
+        loyalty_card = LoyaltyCard.objects.filter(card_holder=request.user.username)
 
     room_bookings = combo_bookings = taxi_bookings = None
     room_bookings_upcoming = room_bookings_completed = None
@@ -152,6 +152,7 @@ def traveler(request):
             'loyal_points': loyal_points,
             'room_booking_type': room_booking_type,
             'combo_booking_type': combo_booking_type,
+            'loyalty_card': loyalty_card
     }
     return render(request, 'traveler/traveler.html', context)
 

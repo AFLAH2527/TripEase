@@ -42,18 +42,14 @@ def taxi_user_register(request):
 @login_required
 @allowed_users(allowed_roles = ['admin', 'taxi'])
 def taxi(request):
-    try:
-        taxi = Taxi.objects.get(poc_name=request.user.username)
-        context = {
-            'taxi':taxi,
-        }
-        return render(request, 'taxi/taxi.html', context)
-    except:
-        #Admin Login
-        context = {
-            'taxi':"Admin",
-        }
-        return render(request, 'taxi/taxi.html', context)
+    taxi = Taxi.objects.get(poc_name=request.user.username)
+    taxi_bookings = TaxiBooking.objects.filter(taxi=taxi)
+    context = {
+        'taxi':taxi,
+        'taxi_bookings': taxi_bookings
+    }
+    return render(request, 'taxi/taxi.html', context)
+    
     
 
 

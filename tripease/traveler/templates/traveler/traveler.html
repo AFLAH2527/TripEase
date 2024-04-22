@@ -54,17 +54,17 @@
       </div>
     </div>
   </div>
-  {% if not loyal_points %}
+  {% if not loyalty_card.active %}
   <div id="alert-additional-content-1" class="p-4 mb-4  border rounded-md bg-white shadow-md" role="alert">
     <div class="flex items-center">
       <svg class="flex-shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
       </svg>      
       <span class="sr-only">Info</span>
-      <h3 class="text-lg font-medium">Loyality points empty</h3>
+      <h3 class="text-lg font-medium">Loyality card not active</h3>
     </div>
     <div class="mt-2 mb-4 text-sm">
-      Purchase loyality cards to earn loyality points to redeem while booking.
+      Purchase loyality cards to redeem loyality points while booking.
     </div>
     <div class="flex">
       <a href="{% url 'loyalty:purchase-card' %}" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center ">
@@ -134,7 +134,9 @@
   </form>
 
 <div class="flex flex-col md:flex-row gap-4">
+
   <div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
+
     <div class="flex justify-between items-center border-b-2 pb-2 mb-2">
       <h3 class="text-xl font-semibold ">Room Bookings</h3>
       <form>
@@ -145,15 +147,16 @@
         </select>
       </form>
     </div>
+
     {% for room_booking in room_bookings %}
-        <div class="flex gap-2 items-center p-2">
+      <div class="flex gap-2 items-center p-2">
           <div class="bg-blue-800 text-white rounded-full p-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
             </svg>          
           </div>
           <div class="flex flex-col">
-            <span class="text-lg font-semibold">{{ room_booking.hotel_name }}</span>
+            <span class="text-xs font-semibold">{{ room_booking.hotel_name }} ({{ room_booking.room.room_type }}) - {{ room_booking.amount }}/-</span>
             <span class="text-gray-400 text-xs">{{ room_booking.start_date }} to  {{ room_booking.end_date }}</span>
           </div>
           <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
@@ -165,20 +168,22 @@
       </div>
     {% endfor %}
 
- </div>
- <div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
-  <div class="flex justify-between items-center border-b-2 pb-2 mb-2">
-    <h3 class="text-xl font-semibold ">Combo Bookings</h3>
-    <form>
-      <select onchange="this.form.submit()"  name="combo_booking_type" class="bg-gray-50  text-gray-900 text-xs rounded-lg   block p-2.5 ">
-        <option value="all" {% if combo_booking_type == 'all' %}selected{% endif %}>All</option>
-        <option value="upcoming" {% if combo_booking_type == 'upcoming' %}selected{% endif %}>Upcoming</option>
-        <option value="completed" {% if combo_booking_type == 'completed' %}selected{% endif %}>Completed</option>
-      </select>
-    </form>
   </div>
-  {% for combo_booking in combo_bookings %}
-  <div class="flex gap-2 items-center p-2">
+
+  <div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
+
+    <div class="flex justify-between items-center border-b-2 pb-2 mb-2">
+      <h3 class="text-xl font-semibold ">Combo Bookings</h3>
+      <form>
+        <select onchange="this.form.submit()"  name="combo_booking_type" class="bg-gray-50  text-gray-900 text-xs rounded-lg   block p-2.5 ">
+          <option value="all" {% if combo_booking_type == 'all' %}selected{% endif %}>All</option>
+          <option value="upcoming" {% if combo_booking_type == 'upcoming' %}selected{% endif %}>Upcoming</option>
+          <option value="completed" {% if combo_booking_type == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+      </form>
+    </div>
+    {% for combo_booking in combo_bookings %}
+    <div class="flex gap-2 items-center p-2">
     <div class="bg-blue-800 text-white rounded-full p-2">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v16.5M2.25 12h19.5M6.375 17.25a4.875 4.875 0 0 0 4.875-4.875V12m6.375 5.25a4.875 4.875 0 0 1-4.875-4.875V12m-9 8.25h16.5a1.5 1.5 0 0 0 1.5-1.5V5.25a1.5 1.5 0 0 0-1.5-1.5H3.75a1.5 1.5 0 0 0-1.5 1.5v13.5a1.5 1.5 0 0 0 1.5 1.5Zm12.621-9.44c-1.409 1.41-4.242 1.061-4.242 1.061s-.349-2.833 1.06-4.242a2.25 2.25 0 0 1 3.182 3.182ZM10.773 7.63c1.409 1.409 1.06 4.242 1.06 4.242S9 12.22 7.592 10.811a2.25 2.25 0 1 1 3.182-3.182Z" />
@@ -186,46 +191,50 @@
                
     </div>
     <div class="flex flex-col">
-      <span class="text-lg font-semibold">{{ combo_booking.combo.name }}</span>
+      <span class="text-lg font-semibold">{{ combo_booking.combo.name }} - {{ combo_booking.amount }}/-</span>
       <span class="text-gray-400 text-xs">{{ combo_booking.combo.restaurant_name }}</span>
     </div>
     <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
-</div>
-{%empty%}
-<div class="flex flex-col gap-4 w-full justify-center items-center my-8">
-  <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
-  <span class="text-xs text-gray-300">No bookings found!</span>
-</div>
-{% endfor %}
-</div>
-<div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
-  <div class="flex justify-between items-center border-b-2 pb-4 mb-2">
-    <h3 class="text-xl font-semibold ">Taxi Bookings</h3>
+    </div>
+    {%empty%}
+    <div class="flex flex-col gap-4 w-full justify-center items-center my-8">
+      <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
+      <span class="text-xs text-gray-300">No bookings found!</span>
+    </div>
+    {% endfor %}
+
   </div>
-  {% for taxi_booking in taxi_bookings %}
-  <div class="flex gap-2 items-center p-2">
-    <div class="bg-blue-800 text-white rounded-full p-2">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-      </svg>
-      
-               
+
+  <div class="flex flex-col w-full md:w-1/3 rounded-md mt-10 p-8 bg-slate-50 shadow-md">
+
+    <div class="flex justify-between items-center border-b-2 pb-4 mb-2">
+      <h3 class="text-xl font-semibold ">Taxi Bookings</h3>
     </div>
-    <div class="flex flex-col">
-      <span class="text-lg font-semibold">{{ taxi_booking.taxi.name }}</span>
-      <span class="text-gray-400 text-xs">{{ taxi_booking.pickup_location }} to {{ taxi_booking.destination }}</span>
+
+    {% for taxi_booking in taxi_bookings %}
+    <div class="flex gap-2 items-center p-2">
+      <div class="bg-blue-800 text-white rounded-full p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+        </svg>    
+      </div>
+      <div class="flex flex-col">
+        <span class="text-lg font-semibold">{{ taxi_booking.taxi.name }} - {{ taxi_booking.total_rent }}/-</span>
+        <span class="text-gray-400 text-xs">{{ taxi_booking.pickup_location }} to {{ taxi_booking.destination }}</span>
+      </div>
+      <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
     </div>
-    <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
-</div>
-{%empty%}
-<div class="flex flex-col gap-4 w-full justify-center items-center my-8">
-  <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
-  <span class="text-xs text-gray-300">No bookings found!</span>
-</div>
-{% endfor %}
-</div>
+    {%empty%}
+    <div class="flex flex-col gap-4 w-full justify-center items-center my-8">
+      <img src="{% static "images/empty.svg" %}" class="w-36 opacity-50" alt="">
+      <span class="text-xs text-gray-300">No bookings found!</span>
+    </div>
+    {% endfor %}
+    
+  </div>
 
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 <script>
   const c1 = new countUp.CountUp("total",   {{ loyal_points.total_points }})

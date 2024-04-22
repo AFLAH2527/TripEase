@@ -2,67 +2,87 @@
 
 {% block content %}
 
-    <form method="post" class="max-w-md mx-auto">
-        {% csrf_token %}
-        <div class="mb-4">
-            <label for="type" class="block text-gray-700 font-bold">Type:</label>
-            <select name="type" id="type" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+
+<form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+{% csrf_token %}
+
+    <div class="flex flex-col md:grid md:grid-cols-2 gap-8">
+
+        <div class="flex flex-col">
+            <label for="id_name" class="block mb-2 text-sm font-medium text-gray-900 ">Hotel name *</label>
+            <input required type="text" name="name" placeholder="Enter hotel name" id="id_name" {% if hotel %} value="{{ hotel.name }}" {% endif %}
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="id_type" class="block mb-2 text-sm font-medium text-gray-900 ">Hotel type *</label>
+            <select required name="type" id="id_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                 {% for type in types %}
-                    <option value="{{ type.id }}">{{ type.name }}</option>
+                <option value="{{type.id}}">{{type.name}}</option>
                 {% endfor %}
             </select>
         </div>
-        <!-- Repeat the same structure for other form fields -->
-        <!-- Name Field -->
-        <div class="mb-4">
-            <label for="name" class="block text-gray-700 font-bold">Name:</label>
-            <input type="text" name="name" id="name" maxlength="50" required="" {% if hotel %}value="{{ hotel.name }}" readonly{% endif %} class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 ">Email *</label>
+            <input required readonly type="email" name="email" placeholder="Enter email" id="id_email" {% if hotel.email %}value="{{ hotel.email }}" {% else %}value="{{ user.email }}" {% endif %}
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- Email Field -->
-        <div class="mb-4">
-            <label for="email" class="block text-gray-700 font-bold">Email:</label>
-            <input type="email" name="email" id="email" maxlength="254" required="" {% if hotel.email %}value="{{ hotel.email }}" {% else %}value="{{ user.email }}" {% endif %} readonly class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_phone" class="block mb-2 text-sm font-medium text-gray-900 ">Phone *</label>
+            <input required type="number" name="phone" placeholder="Enter phone number" id="id_phone" value="{{ hotel.phone }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- Phone Field -->
-        <div class="mb-4">
-            <label for="phone" class="block text-gray-700 font-bold">Phone:</label>
-            <input type="text" name="phone" id="phone" maxlength="50" required="" value="{{ hotel.phone }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_poc_name" class="block mb-2 text-sm font-medium text-gray-900 ">POC (Point of Contact) *</label>
+            <input required readonly type="text" name="poc_name" placeholder="Enter budget" id="id_poc_name" value="{{ user.username }}"class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- POC Name Field -->
-        <div class="mb-4">
-            <label for="poc_name" class="block text-gray-700 font-bold">POC (Point of Contact):</label>
-            <input type="text" name="poc_name" id="poc_name" maxlength="50" required="" value="{{ user.username }}" readonly class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_poc_phone" class="block mb-2 text-sm font-medium text-gray-900 ">POC Phone *</label>
+            <input required type="number" name="poc_phone" placeholder="Enter POC Phone number" id="id_poc_phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- POC Phone Field -->
-        <div class="mb-4">
-            <label for="poc_phone" class="block text-gray-700 font-bold">POC Phone:</label>
-            <input type="text" name="poc_phone" id="poc_phone" maxlength="50" required="" value="{{ hotel.poc_phone }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+    </div>
+
+
+    <div class="flex flex-col md:grid md:grid-cols-4 gap-8 mt-8">
+
+        <div class="flex flex-col">
+            <label for="id_place" class="block mb-2 text-sm font-medium text-gray-900 ">Place *</label>
+            <input required type="text" placeholder="Enter place" name="place" id="id_place" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- Place Field -->
-        <div class="mb-4">
-            <label for="place" class="block text-gray-700 font-bold">Place:</label>
-            <input type="text" name="place" id="place" maxlength="50" required="" value="{{ hotel.place }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_district" class="block mb-2 text-sm font-medium text-gray-900 ">District *</label>
+            <input required type="text" placeholder="Enter district" name="district" id="id_district" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- District Field -->
-        <div class="mb-4">
-            <label for="district" class="block text-gray-700 font-bold">District:</label>
-            <input type="text" name="district" id="district" maxlength="50" required="" value="{{ hotel.district }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_state" class="block mb-2 text-sm font-medium text-gray-900 ">State *</label>
+            <input required type="text" placeholder="Enter state" name="state" id="id_statee" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- State Field -->
-        <div class="mb-4">
-            <label for="state" class="block text-gray-700 font-bold">State:</label>
-            <input type="text" name="state" id="state" maxlength="50" required="" value="{{ hotel.state }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col">
+            <label for="id_location" class="block mb-2 text-sm font-medium text-gray-900 ">Location *</label>
+            <input required type="text" placeholder="Enter location" name="location" id="id_location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </div>
-        <!-- Location Field -->
-        <div class="mb-4">
-            <label for="location" class="block text-gray-700 font-bold">Location:</label>
-            <input type="text" name="location" id="location" maxlength="50" required="" value="{{ hotel.location }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-3 leading-tight transition-colors duration-200 ease-in-out">
+
+        <div class="flex flex-col gap-2 justify-center items-center col-span-4">
+            <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                REGISTER
+                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
+                </button>
+            <span id="error_message" class="hidden text-red-400 text-sm bg-red-100 px-4 py-2 border rounded border-red-400">Percentages must add up to 100.</span>    
         </div>
-        <!-- Submit Button -->
-        <div class="mb-4">
-            <button type="submit" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 ease-in-out">Register</button>
-        </div>
-    </form>
+
+    </div>
+
+</form>
 
 
 {% endblock content %}
