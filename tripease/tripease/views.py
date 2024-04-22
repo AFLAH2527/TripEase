@@ -20,7 +20,7 @@ def redirect_login(request):
             if hotel.admin_approved==True:
                 return redirect('hotel:hotel')
             else:
-                return HttpResponse("Admin approvel pending")
+                return render(request, 'redirect_login.html')
         except:
             return HttpResponse("No hotels registered under this user")
     
@@ -30,9 +30,9 @@ def redirect_login(request):
             if restaurant.admin_approved==True:
                 return redirect('restaurant:restaurant')
             else:
-                return HttpResponse("Admin approvel pending")
+                return render(request, 'redirect_login.html')
         except:
-            return HttpResponse("Invalid Login")
+            return render(request, 'invalid_login.html')
     
     elif user_type=='taxi':
         try:
@@ -40,7 +40,7 @@ def redirect_login(request):
             if taxi.admin_approved==True:
                 return redirect('taxi:taxi')
             else:
-                return HttpResponse("Admin approvel pending")
+                return render(request, 'redirect_login.html')
         except:
             return HttpResponse("No taxis registered under this user")
     
@@ -48,7 +48,7 @@ def redirect_login(request):
         return redirect('traveler:traveler')
 
     else:
-        return HttpResponse("Invalid Login")
+        return render(request, 'invalid_login.html')
 
 
 def landing_page(request):

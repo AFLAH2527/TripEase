@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Invalid Login</title>
+{% endblock title  %}
+
+{% block content %}
+<div class="w-full h-full bg-[url('/static/images/landing.jpg')] bg-cover px-4 md:px-36 md:py-16 flex flex-col justify-center items-center">
+    <div  class="flex flex-col gap-4 w-full max-w-96 bg-white p-8 rounded-md shadow-md">
+        {% csrf_token %}
+        <h1 class="text-xl font-semibold border-b-2 mb-4 pb-2">Invalid Login Credentials</h1>
+        <span>Invalid login credentials, please check your username/password</span>
+
+        <a href="{% url "login" %}" class="font-semibold text-lg text-blue-800">Ok</a>
+
+    </form>
+</div>
+{% endblock content %}
+
+
+
+
+<!-- <form method="post" class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:mx-auto w-full mt-10 md:mt-0">
+    {% csrf_token %}
+
+    <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Login to continue</h2>
+    
+    <div class="relative mb-4">
+    <label for="id_username" class="leading-7 text-sm text-gray-600">Username</label>
+    <input type="text" id="id_username" name="username" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="">
+    </div>
+
+    <div class="relative mb-4">
+    <label for="id_password" class="leading-7 text-sm text-gray-600">Password</label>
+    <input type="password" id="id_password" name="password" required class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+    </div>
+
+    <p class="text-xs text-gray-500 mt-3">Don't have an account? <a href="">Register here</a></p>
+    <a href="{% url 'traveler:traveler-register' %}">Register as Traveler</a>
+    <a href="{% url 'hotel:hotel-user-register' %}">Register as Hotel</a>
+    <a href="{% url 'restaurant:restaurant-user-register' %}">Register as Restaurant</a>
+    <a href="{% url 'taxi:taxi-user-register' %}">Register as Taxi</a>
+</form> -->
