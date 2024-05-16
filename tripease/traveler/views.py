@@ -130,6 +130,7 @@ def traveler(request):
 
         room_booking_type = request.GET.get('room_booking_type', 'all')
         combo_booking_type = request.GET.get('combo_booking_type', 'all')
+        taxi_booking_type = request.GET.get('taxi_booking_type', 'all')
 
         all_room_bookings = RoomBooking.objects.filter(traveler_name=traveler_name)
         room_bookings = all_room_bookings   if room_booking_type == 'all' else all_room_bookings.filter(start_date__gt=current_date) if room_booking_type == 'upcoming' else all_room_bookings.filter(end_date__lte=current_date)
@@ -137,8 +138,8 @@ def traveler(request):
         all_combo_bookings = ComboBooking.objects.filter(traveler_name=traveler_name)
         combo_bookings = all_combo_bookings   if combo_booking_type == 'all' else all_combo_bookings.filter(food_date__gte=current_date) if combo_booking_type == 'upcoming' else all_combo_bookings.filter(food_date__lt=current_date)
         
-        taxi_bookings = TaxiBooking.objects.filter(traveler_name=traveler_name)
-
+        all_taxi_bookings = TaxiBooking.objects.filter(traveler_name=traveler_name)
+        taxi_bookings = all_taxi_bookings   if taxi_booking_type == 'all' else all_taxi_bookings.filter(start_date__gte=current_date) if taxi_booking_type == 'upcoming' else all_taxi_bookings.filter(start_date__lt=current_date)
 
         
     loyal_points = LoyalPoint.objects.filter(traveler=request.user.username).first()
@@ -152,6 +153,7 @@ def traveler(request):
             'loyal_points': loyal_points,
             'room_booking_type': room_booking_type,
             'combo_booking_type': combo_booking_type,
+            'taxi_booking_type': taxi_booking_type,
             'loyalty_card': loyalty_card
     }
     return render(request, 'traveler/traveler.html', context)
