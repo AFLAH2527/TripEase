@@ -28,7 +28,7 @@
             <input type="password" name="password" id="website-admin" class="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 md:w-96 max-w-full text-sm border-gray-300 p-2.5  " placeholder="Password">
         </div>
         <div class="flex justify-end">
-            <a href="" class="underline text-xs">Forget Password?</a>
+            <a href="{% url 'password_reset' %}" class="underline text-xs">Forget Password?</a>
         </div>
         <button type="submit" class="text-white bg-blue-800 border-0 py-2 px-8 focus:outline-none hover:bg-blue-900 rounded-md text-lg mt-4 font-medium">Login</button>
         <div class="flex justify-center items-center text-xs gap-2">

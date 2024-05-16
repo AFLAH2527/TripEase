@@ -11,7 +11,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
             </svg>
-            {% if hotel %}<span class="ml-3 text-xl">{{ hotel.name }}</span>{% else %}<span class="ml-3 text-xl">{{ room.hotel_name.name }}</span>{% endif %}
+            {% if hotel %}<a href="{% url 'hotel:hotel' %}" class="ml-3 text-xl">{{ hotel.name }}</a>{% else %}<a href="{% url 'hotel:hotel' %}" class="ml-3 text-xl">{{ room.hotel_name.name }}</a>{% endif %}
             </a>
             <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
             {% if hotel %}<a href="#" class="mr-5 hover:text-gray-900">Add Room</a>{% else %}<a href="#" class="mr-5 hover:text-gray-900">Update Room</a>{% endif %}
@@ -36,7 +36,7 @@
         
         {% if hotel %}  
 
-        <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+        <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <span class="text-xl col-span-3 font-semibold pb-8">{{ hotel.name }} | Add Room</span>
             <input type="hidden" name="hotel_name" value="{{ hotel.id }}" readonly>
@@ -71,6 +71,21 @@
                         <label for="id_ac">AC</label>
                     </div>
                 </div>
+            </div>
+
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <label for="id_image1">Image 1</label>
+                        <input type="file" name="image1" accept="image/*" id="id_image1">
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <label for="id_image2">Image 2</label>
+                        <input type="file" name="image2" accept="image/*" id="id_image2">
+                    </div>
+                </div>
                 
                 <div class="flex flex-col gap-2 justify-center items-center col-span-3">
                     <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
@@ -87,7 +102,7 @@
 
         {% else %}
 
-        <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+        <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <span class="text-xl col-span-3 font-semibold pb-8">{{ room.hotel_name.name }} | Add Room</span>
             <input type="hidden" name="hotel_name" value="{{ room.hotel_name.id }}" readonly>
@@ -111,7 +126,6 @@
         
             </div>
 
-
             <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
                 <div class="flex flex-col">
                     <div class="mb-4">
@@ -125,6 +139,28 @@
                         <label for="id_ac">AC</label>
                     </div>
                 </div>
+            </div>
+
+
+            <div class="flex flex-col md:grid md:grid-cols-3 gap-8 mt-8">
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <label for="id_image1">Image 1</label>
+                        {% if room.image1 %}
+                            <a href="{{ room.image1.url }}">{{ room.image1.url }}</a>
+                        {% endif %}
+                        <input type="file" name="image1" accept="image/*" id="id_image1">
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="mb-4">
+                        <label for="id_image2">Image 2</label>
+                        {% if room.image2 %}
+                            <a href="{{ room.image2.url }}">{{ room.image2.url }}</a>
+                        {% endif %}
+                        <input type="file" name="image2" accept="image/*" id="id_image2">
+                    </div>
+                </div>
                 
                 <div class="flex flex-col gap-2 justify-center items-center col-span-3">
                     <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
@@ -136,6 +172,8 @@
                       
                 </div>
             </div>
+
+            
           
         </form>
 

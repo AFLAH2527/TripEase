@@ -41,6 +41,8 @@ class Room(models.Model):
     bathroom_attached = models.BooleanField(default=False)
     ac = models.BooleanField(default=False)
     count = models.IntegerField()
+    image1 = models.ImageField(null=True, blank=True, upload_to="images/")
+    image2 = models.ImageField(null=True, blank=True, upload_to="images/")
 
     def __str__(self):
         return f'{self.room_type}-{self.hotel_name}'

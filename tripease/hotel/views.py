@@ -93,7 +93,7 @@ def add_rooms(request, id):
     hotel = Hotel.objects.get(id=id)
 
     if request.method == 'POST':
-        form = AddRoomsForm(request.POST)
+        form = AddRoomsForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
         return redirect('hotel:hotel')    
@@ -110,7 +110,7 @@ def update_room(request, id):
     room = Room.objects.get(id=id)
 
     if request.method == 'POST':
-        form = AddRoomsForm(request.POST, instance=room)
+        form = AddRoomsForm(request.POST, request.FILES, instance=room)
         if form.is_valid():
             form.save()
         return redirect('hotel:hotel')    

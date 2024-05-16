@@ -41,6 +41,14 @@
         {% for room in rooms %}
         <div class="rounded bg-white border-2 p-4 flex flex-col gap-2">              
             <span class="font-semibold">{{room.hotel_name.name}}</span>
+            <div class="flex gap-4">
+                {% if room.image1 %}
+                  <img src="{{ room.image1.url }}" alt="" width="150">
+                {% endif %}
+                {% if room.image2 %}
+                  <img src="{{ room.image2.url }}" alt="" width="150">
+                {% endif %}
+            </div>
             <div class="flex gap-4"><span>Type:</span> <span class="text-gray-400">{{room.room_type}}</span></div>
             <div class="flex gap-4"><span>Rooms:</span> <span class="text-gray-400">{{room.count}}</span></div>
             <div class="flex gap-4"><span>Bathroom Type:</span> <span class="text-gray-400">{% if room.bathroom_attached  %}Attached{% else %}Shared{% endif %}</span></div>
