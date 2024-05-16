@@ -149,6 +149,40 @@ def add_menu_combo(request):
             # 'button':"Register"
         }
         return render(request, 'restaurant/add_menu_combo.html', context)
+    
+
+@login_required
+@allowed_users(allowed_roles = ['admin', 'restaurant'])
+def update_menu_combo(request, id):
+    user = request.user
+    combo = Combo.objects.get(id=id)
+    try:
+        if request.method == 'POST':
+            form = AddMenuComboForm(request.POST, instance=combo)
+            # try:
+            #     restaurant = Restaurant.objects.get(poc_name=user.username)
+            #     form = AddMenuItemsForm(request.POST, instance=restaurant)
+            # except:
+            #     form = AddMenuItemsForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+            return redirect('restaurant:restaurant')
+        
+        restaurant = combo.restaurant_name
+        items = Item.objects.filter(restaurant_name=restaurant.id)
+        context = {
+            'combo': combo,
+            'items': items,
+            'form': AddMenuComboForm(instance=combo)
+        }
+        return render(request, 'restaurant/add_menu_combo.html', context)
+        
+    except:
+        context = {
+            # 'button':"Register"
+        }
+        return render(request, 'restaurant/add_menu_combo.html', context)
 
 
 def book_combo(request, combo_id):

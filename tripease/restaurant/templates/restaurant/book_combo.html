@@ -27,7 +27,7 @@
         </div>
         <div class="flex flex-col ">
             <span class="text-sm text-gray-400 font-medium">Items</span>
-            <span class="text-lg font-semibold">{% for item in combo.items.objects %}{{item}} {% endfor %}</span>
+            <span class="text-lg font-semibold">{% for item in combo.items.all %}{{item.name}}, {% endfor %}</span>
         </div>
         <div class="flex flex-col ">
             <span class="text-sm text-gray-400 font-medium">Restaurant Location</span>

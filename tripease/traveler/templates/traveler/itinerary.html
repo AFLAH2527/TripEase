@@ -53,7 +53,7 @@
             <div class="flex gap-4"><span>Rooms:</span> <span class="text-gray-400">{{room.count}}</span></div>
             <div class="flex gap-4"><span>Bathroom Type:</span> <span class="text-gray-400">{% if room.bathroom_attached  %}Attached{% else %}Shared{% endif %}</span></div>
             <div class="flex gap-4"><span>Rate:</span> <span class="text-gray-400">₹{{room.price}} / night</span></div>
-            <div class="flex gap-4"><span>Location:</span> <span class="text-gray-400">{{room.hotel_name.place}}</span></div>
+            <div class="flex gap-4"><span>Location:</span> <span class="text-blue-600 underline"><a href="//{{room.hotel_name.location}}/">{{room.hotel_name.location}}</a></span></div>
             <div class="flex gap-4"><span>Phone:</span> <span class="text-gray-400">+91{{room.hotel_name.phone}}</span></div>
             <div class="flex">
                 <a href="{% url 'hotel:book-room' room.id %}" class="bg-blue-800 hover:bg-blue-900 text-white px-2 py-1 text-sm rounded">
@@ -74,10 +74,11 @@
         {% for combo in combos %}
         <div class="rounded bg-white border-2 p-4 flex flex-col gap-2">              
             <span class="font-semibold">{{combo.name}}</span>
+            <div class="flex gap-4"><span>Items:</span> <span class="text-gray-400">{% for item in combo.items.all %}{{item.name}}, {% endfor %}</span></div>
             <div class="flex gap-4"><span>Price:</span> <span class="text-gray-400">₹{{combo.price}}</span></div>
             <div class="flex gap-4"><span>Restaurant:</span> <span class="text-gray-400">{{combo.restaurant_name.name}}</span></div>
             <div class="flex gap-4"><span>Rate:</span> <span class="text-gray-400">₹{{combo.price}}</span></div>
-            <div class="flex gap-4"><span>Location:</span> <span class="text-gray-400">{{combo.restaurant_name.place}}</span></div>
+            <div class="flex gap-4"><span>Location:</span> <span class="text-blue-600 underline"><a href="//{{combo.restaurant_name.location}}/">{{combo.restaurant_name.location}}</a></span></div>
             <div class="flex gap-4"><span>Phone:</span> <span class="text-gray-400">+91{{combo.restaurant_name.phone}}</span></div>
             <div class="flex">
                 <a href="{% url 'restaurant:book-combo' combo.id %}" class="bg-blue-800 hover:bg-blue-900 text-white px-2 py-1 text-sm rounded">

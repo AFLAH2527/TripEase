@@ -53,7 +53,7 @@
             <div class="flex gap-4"><span>Location:</span> <span class="text-gray-400">{{combo.restaurant_name.place}}</span></div>
             <div class="flex gap-4"><span>Phone:</span> <span class="text-gray-400">+91{{combo.restaurant_name.phone}}</span></div>
             <div class="flex">
-                <a href="#" class="bg-blue-800 hover:bg-blue-900 text-white px-2 py-1 text-sm rounded">
+                <a href="{% url 'restaurant:update-menu-combo' combo.id %}" class="bg-blue-800 hover:bg-blue-900 text-white px-2 py-1 text-sm rounded">
                     Update combo
                 </a>
             </div>
