@@ -1,105 +1,41 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>Reg Taxi</title>
-{% endblock title  %}
+    <title>Add Menu Items - {{restaurant.name}}</title>
+{% endblock title %}
 
 {% block content %}
 
-{% if button == 'Register' %}
+<header class="text-gray-600 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        
+        <a href="{% url 'taxi:taxi' %}" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+        <span class="ml-3 text-xl">{{ taxi.name }}</span>
+        </a>
+        <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+        <a href="#" class="mr-5 hover:text-gray-900">Update Taxi details</a>
+        </nav>
 
-    <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
+        <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
-    
-        <div class="flex flex-col md:grid md:grid-cols-2 gap-8">
-    
-            <div class="flex flex-col">
-                <label for="id_name" class="block mb-2 text-sm font-medium text-gray-900 ">Driver name *</label>
-                <input required type="text" name="name" placeholder="Enter driver name" id="id_name" {% if taxi %} value="{{ taxi.name }}" {% endif %}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_type" class="block mb-2 text-sm font-medium text-gray-900 ">Taxi type *</label>
-                <select required name="type" id="id_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                    {% for type in types %}
-                    <option value="{{type.id}}">{{type.name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 ">Email *</label>
-                <input required readonly type="email" name="email" placeholder="Enter email" id="id_email" {% if hotel.email %}value="{{ hotel.email }}" {% else %}value="{{ user.email }}" {% endif %}
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_phone" class="block mb-2 text-sm font-medium text-gray-900 ">Phone *</label>
-                <input required type="number" name="phone" placeholder="Enter phone number" id="id_phone" value="{{ hotel.phone }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_poc_name" class="block mb-2 text-sm font-medium text-gray-900 ">POC (Point of Contact) *</label>
-                <input required readonly type="text" name="poc_name" placeholder="Enter budget" id="id_poc_name" value="{{ user.username }}"class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_poc_phone" class="block mb-2 text-sm font-medium text-gray-900 ">POC Phone *</label>
-                <input required type="number" name="poc_phone" placeholder="Enter POC Phone number" id="id_poc_phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_daily_rent" class="block mb-2 text-sm font-medium text-gray-900 ">Daily Rent *</label>
-                <input required type="number" name="daily_rent" placeholder="Enter Daily Rent" id="id_daily_rent" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_km_charge" class="block mb-2 text-sm font-medium text-gray-900 ">KM Charge *</label>
-                <input required type="number" name="km_charge" placeholder="Enter KM Charge" id="id_km_charge" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-        </div>
-    
-    
-        <div class="flex flex-col md:grid md:grid-cols-4 gap-8 mt-8">
-    
-            <div class="flex flex-col">
-                <label for="id_place" class="block mb-2 text-sm font-medium text-gray-900 ">Place *</label>
-                <input required type="text" placeholder="Enter place" name="place" id="id_place" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_district" class="block mb-2 text-sm font-medium text-gray-900 ">District *</label>
-                <input required type="text" placeholder="Enter district" name="district" id="id_district" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_state" class="block mb-2 text-sm font-medium text-gray-900 ">State *</label>
-                <input required type="text" placeholder="Enter state" name="state" id="id_statee" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col">
-                <label for="id_location" class="block mb-2 text-sm font-medium text-gray-900 ">Location *</label>
-                <input required type="text" placeholder="Enter location" name="location" id="id_location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-            </div>
-    
-            <div class="flex flex-col gap-2 justify-center items-center col-span-4">
-                <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-                    REGISTER
-                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                    </svg>
-                    </button>
-                <span id="error_message" class="hidden text-red-400 text-sm bg-red-100 px-4 py-2 border rounded border-red-400">Percentages must add up to 100.</span>    
-            </div>
-    
-        </div>
-    
-    </form>
+            <button type="submit" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                Logout
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </form>
 
-{% else %}
+    </div>
+</header>
 
+
+
+<div class="w-full h-full overflow-x-hidden overflow-y-scroll bg-[url('/static/images/bg.jpg')] bg-cover flex flex-col  px-8 py-4 md:px-16 md:py-8 lg:px-36 lg:py-16 gap-8">
+     
 
     <form name='search_form' class="bg-slate-50 shadow-md rounded-md p-8 flex flex-col" action="" method="post">
         {% csrf_token %}
@@ -185,6 +121,8 @@
                 <input required type="text" placeholder="Enter location" name="location" id="id_location" value="{{ taxi.location }}"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
             </div>
+            <input hidden type="checkbox" name="admin_approved" checked>
+            <input hidden type="checkbox" name="available" {% if taxi.available == True %} checked {% endif %}>
     
             <div class="flex flex-col gap-2 justify-center items-center col-span-4">
                 <button type="submit" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
@@ -200,14 +138,13 @@
     
     </form>
 
-{% endif %}
+    
+
+</div>
 
 
 
 
-
-
-{% endblock content %}
-
+{% endblock content %}  
 
 

@@ -159,7 +159,7 @@
             <span class="text-xs font-semibold">{{ room_booking.hotel_name }} ({{ room_booking.room.room_type }}) - {{ room_booking.amount }}/-</span>
             <span class="text-gray-400 text-xs">{{ room_booking.start_date }} to  {{ room_booking.end_date }}</span>
           </div>
-          <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
+          <!-- <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span> -->
       </div>
       {%empty%}
       <div class="flex flex-col gap-4 w-full justify-center items-center my-8">
@@ -194,7 +194,7 @@
       <span class="text-lg font-semibold">{{ combo_booking.combo.name }} - {{ combo_booking.amount }}/-</span>
       <span class="text-gray-400 text-xs">{{ combo_booking.combo.restaurant_name }}</span>
     </div>
-    <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
+    <!-- <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span> -->
     </div>
     {%empty%}
     <div class="flex flex-col gap-4 w-full justify-center items-center my-8">
@@ -229,7 +229,7 @@
         <span class="text-lg font-semibold">{{ taxi_booking.taxi.name }} - {{ taxi_booking.total_rent }}/-</span>
         <span class="text-gray-400 text-xs">{{ taxi_booking.pickup_location }} to {{ taxi_booking.destination }}</span>
       </div>
-      <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span>
+      <!-- <span class="ml-auto bg-blue-800 px-2 py-1 rounded text-xs cursor-pointer text-white">View</span> -->
     </div>
     {%empty%}
     <div class="flex flex-col gap-4 w-full justify-center items-center my-8">

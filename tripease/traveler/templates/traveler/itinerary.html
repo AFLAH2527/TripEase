@@ -101,7 +101,7 @@
             <div class="flex gap-4"><span>Type:</span> <span class="text-gray-400">{{taxi.type}}</span></div>
             <div class="flex gap-4"><span>Daily Rent:</span> <span class="text-gray-400">₹{{taxi.daily_rent}}</span></div>
             <div class="flex gap-4"><span>KM Charge:</span> <span class="text-gray-400">₹{{taxi.km_charge}} / KM</span></div>
-            <div class="flex gap-4"><span>Location:</span> <span class="text-gray-400">{{taxi.place}}</span></div>
+            <div class="flex gap-4"><span>Location:</span> <span class="text-blue-600 underline"><a href="//{{taxi.location}}/">{{taxi.location}}</a></span></div>
             <div class="flex gap-4"><span>Phone:</span> <span class="text-gray-400">+91{{taxi.phone}}</span></div>
             <div class="flex">
                 <a href="{% url 'taxi:book-taxi' taxi.id %}" class="bg-blue-800 hover:bg-blue-900 text-white px-2 py-1 text-sm rounded">

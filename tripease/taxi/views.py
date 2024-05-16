@@ -48,9 +48,7 @@ def taxi(request):
         'taxi':taxi,
         'taxi_bookings': taxi_bookings
     }
-    return render(request, 'taxi/taxi.html', context)
-    
-    
+    return render(request, 'taxi/taxi.html', context)   
 
 
 @login_required
@@ -85,7 +83,28 @@ def register_taxi(request):
             'button':"Register"
         }
         return render(request, 'taxi/register_taxi.html', context)
+
+
+@login_required
+@allowed_users(allowed_roles = ['admin', 'taxi'])
+def update_taxi(request, id):
+    user = request.user
+    types = Type.objects.all()
+    taxi = Taxi.objects.get(id=id)
+    if request.method == 'POST':
+        form = TaxiRegistrationForm(request.POST, instance=taxi)
+
+        if form.is_valid():
+            form.save()
+        return redirect('taxi:taxi')
     
+    context = {
+        'user': user,
+        'types':types,
+        'taxi': taxi
+    }
+    return render(request, 'taxi/update_taxi.html', context)
+
 
 def book_taxi(request, taxi_id):
     taxi = Taxi.objects.get(pk=taxi_id)
